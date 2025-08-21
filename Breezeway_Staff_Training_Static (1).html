@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breezeway Staff Training Course</title>
+    <style>
+      body { font-family: Arial, sans-serif; background: #f9fafb; margin: 0; padding: 2rem; }
+      h1, h2 { margin: 0; }
+      .progress { background: #e5e7eb; border-radius: 9999px; height: 20px; overflow: hidden; margin-bottom: 1rem; }
+      .progress-bar { background: #2563eb; height: 100%; color: white; text-align: center; white-space: nowrap; transition: width 0.5s; }
+      .card { background: white; border-radius: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+      .card-header { padding: 1rem; display: flex; align-items: center; cursor: pointer; }
+      .card-header h2 { flex: 1; font-size: 1.2rem; }
+      .card-body { padding: 0 1rem 1rem 1rem; display: none; }
+      .card-body ol { margin: 0.5rem 0; padding-left: 1.5rem; }
+      .best-practice { color: green; font-weight: bold; margin-top: 0.5rem; }
+      .placeholder { color: #6b7280; margin-top: 0.5rem; font-style: italic; }
+      .complete { margin-left: 0.5rem; }
+    </style>
+  </head>
+  <body>
+    <h1>📘 Breezeway Staff Training Course</h1>
+    <p>Implementation Next Steps – Complete before the next team meeting</p>
+
+    <div class="progress"><div id="progressBar" class="progress-bar">0 / 8 Modules Complete</div></div>
+    <p style="color:#6b7280;">Tick a module when you've completed all its steps. Click a module row to expand/collapse details.</p>
+
+    <div id="modules"></div>
+
+    <div class="card" style="background:#dbeafe;">
+      <div class="card-header"><h2>📋 Delivery Plan</h2></div>
+      <div class="card-body" style="display:block;">
+        <ul>
+          <li>Seven short modules (10–15 min each) + one mini-module for known limitation.</li>
+          <li>Hands-on practice in Breezeway while following this guide.</li>
+          <li>Target: Complete all steps before the next team meeting.</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      const modules = [
+        {title: "Module 1: Property Setup Basics", steps: ["Go to Properties section", "Select a property", "Scroll to Requirements/Notes", "Add specific needs", "Click Save"], bestPractice: "Use Templates for repeated requirements.", placeholder: "Insert screenshot of Property Requirements"},
+        {title: "Module 2: Organising Properties", steps: ["Navigate to Properties > Groups/Tags", "Click New Group", "Assign properties", "Add Tags"], bestPractice: "Consistent tags save time.", placeholder: "Insert screenshot of Groups/Tags setup"},
+        {title: "Module 3: User Access", steps: ["Go to Settings > Users", "Click Add User", "Enter details", "Select role", "Click Save"], bestPractice: "Limit Admin roles.", placeholder: "Insert screenshot of User Management"},
+        {title: "Module 4: Mobile App Readiness", steps: ["Download app", "Login", "Confirm property list", "Enable notifications"], bestPractice: "Enable push notifications.", placeholder: "Insert screenshot of Mobile login"},
+        {title: "Module 5: Data Accuracy – Spreadsheet", steps: ["Open spreadsheet", "Fill missing details", "Cross-check with Breezeway", "Highlight discrepancies"], bestPractice: "Spreadsheet is single source of truth.", placeholder: "Insert screenshot of spreadsheet"},
+        {title: "Module 6: Task Creation Practice", steps: ["Click New Task", "Select property", "Add title", "Assign", "Save & complete via app"], bestPractice: "Attach photos for verification.", placeholder: "Insert screenshot of task creation"},
+        {title: "Module 7: Review & Agenda Check", steps: ["Open Implementation Agenda", "Mark items", "Record blockers", "Bring to meeting"], bestPractice: "Keep one list for questions.", placeholder: "Insert screenshot of Agenda"},
+        {title: "Mini-Module: Maintenance Tab Limitation & Workaround", steps: ["Issue appears in Maintenance tab", "No templates/assignees here", "Workaround: create from Property", "Apply template for auto-assignment", "Close duplicate Maintenance-tab task"], bestPractice: "Recreate tasks in Property view until fixed.", placeholder: "Insert screenshot of Maintenance tab vs Property"}
+      ];
+
+      const container = document.getElementById('modules');
+      let completed = new Array(modules.length).fill(false);
+
+      modules.forEach((m, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const header = document.createElement('div');
+        header.className = 'card-header';
+        const title = document.createElement('h2');
+        title.textContent = m.title;
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'complete';
+
+        header.appendChild(title);
+        header.appendChild(checkbox);
+        card.appendChild(header);
+
+        const body = document.createElement('div');
+        body.className = 'card-body';
+        const list = document.createElement('ol');
+        m.steps.forEach(s => { const li = document.createElement('li'); li.textContent = s; list.appendChild(li); });
+        body.appendChild(list);
+        const best = document.createElement('p'); best.textContent = '✅ Best Practice: ' + m.bestPractice; best.className = 'best-practice'; body.appendChild(best);
+        const ph = document.createElement('p'); ph.textContent = m.placeholder; ph.className = 'placeholder'; body.appendChild(ph);
+
+        card.appendChild(body);
+
+        header.addEventListener('click', (e) => { if(e.target.tagName!=='INPUT'){ body.style.display = body.style.display==='block'?'none':'block'; } });
+        checkbox.addEventListener('change', () => {
+          completed[i] = checkbox.checked;
+          const count = completed.filter(Boolean).length;
+          const bar = document.getElementById('progressBar');
+          bar.style.width = `${(count/modules.length)*100}%`;
+          bar.textContent = `${count} / ${modules.length} Modules Complete`;
+        });
+
+        container.appendChild(card);
+      });
+    </script>
+  </body>
+</html>
