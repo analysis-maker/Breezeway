@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!--
+    Professional Holiday Homes — Breezeway Staff Training (Readable Source)
+    Version: v1.2 (Branded, Readable)
+
+    Deployment (Option A):
+      - Save this file as index.html at your repo root or web root
+      - Place these images in the SAME folder:
+          phhlogo_new_large-1.webp
+          Book-Only-266x300.jpg
+      - (Optional) add an empty .nojekyll file in the repo root for GitHub Pages
+
+    Notes:
+      - Progress persists per browser/device via localStorage key: phh-breezeway-v1-2
+      - Update MASTER KB & Orientation video links below if they change
+  -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Professional Holiday Homes — Breezeway Staff Training</title>
   <meta name="description" content="PHH Breezeway Staff Training — role-based SOPs with checklists, progress tracking, and links to the Master KB and Orientation video." />
-  <link rel="icon" type="image/png" href="phhlogo_new_large-1.webp" />
+  <link rel="icon" type="image/webp" href="phhlogo_new_large-1.webp" />
   <style>
+    /* =========================
+       PHH Brand & UI Variables
+       ========================= */
     :root {
-      /* ===== PHH Brand ===== */
-      --brand-1: #1691cf; /* primary blue (logo) */
-      --brand-2: #5ab4e8; /* light blue (logo gradient) */
-      --brand-ink: #0b5881; /* dark ink */
+      /* Brand palette (from PHH logo) */
+      --brand-1: #1691CF; /* primary */
+      --brand-2: #5AB4E8; /* gradient light */
+      --brand-ink: #0B5881; /* headings/ink */
 
-      /* ===== UI Palette ===== */
+      /* UI palette */
       --bg: #f7fbff;
       --card: #ffffff;
       --muted: #6b7280;
@@ -21,30 +39,56 @@
       --accent-2: #e7f4ff;
       --shadow: rgba(13, 51, 80, 0.1);
     }
+
+    /* Base */
     * { box-sizing: border-box; }
     html, body { height: 100%; }
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); margin: 0; color: #111827; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+        "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      margin: 0;
+      color: #111827;
+    }
 
-    /* ===== Header ===== */
-    .site-header { position: sticky; top: 0; z-index: 100; backdrop-filter: saturate(180%) blur(6px); background: linear-gradient(90deg, #ffffffcc 0%, #ffffffee 40%), linear-gradient(90deg, var(--brand-1), var(--brand-2)); border-bottom: 1px solid #e5e7eb; }
-    .header-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; padding: .6rem 1rem; }
+    /* Header */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: saturate(180%) blur(6px);
+      background:
+        linear-gradient(90deg, #ffffffcc 0%, #ffffffee 40%),
+        linear-gradient(90deg, var(--brand-1), var(--brand-2));
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .header-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: auto 1fr auto;
+      align-items: center; gap: 1rem; padding: .6rem 1rem;
+    }
     .brand { display: flex; align-items: center; gap: .75rem; }
     .brand img { height: 40px; width: auto; display: block; }
     .brand-title { font-weight: 700; color: var(--brand-ink); letter-spacing: .2px; }
     .cta { display: flex; gap: .5rem; flex-wrap: wrap; }
 
-    .btn { background: var(--accent); color:#fff; border:0; border-radius: .65rem; padding:.5rem .8rem; cursor:pointer; box-shadow:0 2px 6px var(--shadow); font-weight:600; }
+    .btn {
+      background: var(--accent); color:#fff; border:0; border-radius: .65rem;
+      padding:.5rem .8rem; cursor:pointer; box-shadow:0 2px 6px var(--shadow);
+      font-weight:600;
+    }
     .btn.alt { background: #111827; }
-    .btn.link { background:transparent; color:var(--accent); box-shadow:none; text-decoration:underline; padding:0; }
+    .btn.link { background: transparent; color: var(--accent); box-shadow:none; text-decoration: underline; padding:0; }
 
-    /* ===== Main ===== */
+    /* Main */
     .container { max-width: 1100px; margin: 0 auto; padding: 1rem; }
     .lead { margin: .75rem 0 1rem; color: var(--muted); }
 
     .toolbar { display:flex; gap:.5rem; align-items:center; margin:.5rem 0 1rem; flex-wrap:wrap; }
 
     .progress { background: #e5e7eb; border-radius: 9999px; height: 20px; overflow: hidden; margin:.25rem 0 1.25rem; }
-    .progress-bar { background: linear-gradient(90deg, var(--brand-1), var(--brand-2)); height:100%; color: white; text-align:center; white-space:nowrap; transition: width 0.4s; font-size:.85rem; }
+    .progress-bar {
+      background: linear-gradient(90deg, var(--brand-1), var(--brand-2));
+      height:100%; color: white; text-align:center; white-space:nowrap; transition: width 0.4s; font-size:.85rem;
+    }
 
     .banner { background: var(--accent-2); border-left:4px solid var(--accent); padding:1rem; border-radius:.9rem; margin:0 0 1rem 0; }
     .muted { color: var(--muted); }
@@ -67,7 +111,11 @@
     th, td { border:1px solid #e5e7eb; padding:.5rem; text-align:left; vertical-align:top; }
     th { background:#f9fafb; }
 
-    .footer { margin: 1rem auto 2rem; max-width: 1100px; padding: 0 1rem; font-size:.9rem; color:var(--muted); display:flex; gap:1rem; align-items:center; }
+    /* Footer */
+    .footer {
+      margin: 1rem auto 2rem; max-width: 1100px; padding: 0 1rem;
+      font-size:.9rem; color: var(--muted); display:flex; gap:1rem; align-items:center;
+    }
     .footer img { height: 48px; width:auto; border-radius:.5rem; }
 
     @media (max-width: 640px) {
@@ -84,7 +132,7 @@
         <img src="phhlogo_new_large-1.webp" alt="Professional Holiday Homes logo" />
         <div class="brand-title">Breezeway Staff Training</div>
       </div>
-      <div></div>
+      <div><!-- spacer --></div>
       <div class="cta">
         <a class="btn" href="https://us02web.zoom.us/rec/share/Wlm8sbXJkROUV_k7BP4VBMv0tcQF9Iv8mxJSHQTQU4LPaTsOW-rv5-IxkINd_7SU.epRRfU1FgHW2Qfxt" target="_blank" rel="noopener">▶️ Orientation Video</a>
         <a class="btn alt" href="https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197" target="_blank" rel="noopener">📄 Master KB</a>
@@ -101,10 +149,12 @@
       <button id="expandAll" class="btn alt" type="button">Expand all</button>
       <button id="collapseAll" class="btn alt" type="button">Collapse all</button>
       <button id="reset" class="btn" type="button">Reset progress</button>
-      <span class="muted">Version: <strong>v1.1 (Branded)</strong> • Key: <code>phh-breezeway-v1-1</code></span>
+      <span class="muted">Version: <strong>v1.2 (Branded, Readable)</strong> • Key: <code>phh-breezeway-v1-2</code></span>
     </div>
 
-    <div class="progress" aria-label="Course progress"><div id="progressBar" class="progress-bar">0 / 10 Modules Complete</div></div>
+    <div class="progress" aria-label="Course progress">
+      <div id="progressBar" class="progress-bar">0 / 10 Modules Complete</div>
+    </div>
 
     <div class="banner">
       <strong>Start here — Orientation (Mandatory):</strong>
@@ -145,10 +195,12 @@
   </footer>
 
   <script>
-    // === Config ===
-    const STORAGE_KEY = 'phh-breezeway-v1-1';
+    // =========================
+    // Config & Data
+    // =========================
+    const STORAGE_KEY = 'phh-breezeway-v1-2';
 
-    // === Module Data ===
+    // Each module has: id, title, kb, kbUrl, steps[], best, (optional) extra HTML
     const modules = [
       {
         id: 'm0',
@@ -207,18 +259,106 @@
           <h3>Modifier Packs — Per-Group & Tag (PHH Standard)</h3>
           <div class="subtle">Configure these as template modifiers; mirror the matrix in the Master KB.</div>
           <table>
-            <thead><tr><th>Scope</th><th>Trigger</th><th>Added Steps</th><th>Default Assignee</th><th>Evidence</th><th>Notes</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Scope</th>
+                <th>Trigger</th>
+                <th>Added Steps</th>
+                <th>Default Assignee</th>
+                <th>Evidence</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr><td><strong>Tag: Pet-Friendly</strong></td><td>tag <code>Pet-Friendly</code></td><td>Lint-roll soft furnishings; Deodorise rugs; Garden sweep for droppings; Restock pet bags</td><td>Housekeeping</td><td>Before/after of living, rugs, entry</td><td>Align with PSR per property</td></tr>
-              <tr><td><strong>Tag: Spa/Pool</strong></td><td>tag <code>Spa/Pool</code></td><td>Test water (strip); Record pH/chlorine; Clean filter basket; Inspect cover & clips</td><td>Maintenance / Pool Tech</td><td>Photo of strip + readings</td><td>Weekly recurring + turnover spot-check</td></tr>
-              <tr><td><strong>Group: Jervis Bay North</strong></td><td>group membership</td><td>Sand mitigation (shake/replace entry mats; vacuum sand patterns); Rinse exterior shower</td><td>Housekeeping</td><td>Entry & living floor photos</td><td>High-sand-load properties</td></tr>
-              <tr><td><strong>Group: Jervis Bay South</strong></td><td>group membership</td><td>Outdoor salt-corrosion check; Lubricate hinges/latches</td><td>Maintenance</td><td>Close-up of fittings</td><td>Monthly recurring</td></tr>
-              <tr><td><strong>Group: Berry Hinterland</strong></td><td>group membership</td><td>Water tank level; Driveway erosion; Pest scan</td><td>Maintenance</td><td>Tank gauge; driveway edge photo</td><td>Increase after heavy rain</td></tr>
-              <tr><td><strong>Tag: Owner-Stay</strong></td><td>tag <code>Owner-Stay</code></td><td>Linen inventory count; Secure owner cupboard; Restock hamper</td><td>Housekeeping</td><td>Linen count; cupboard sealed</td><td>Trigger on owner stays</td></tr>
-              <tr><td><strong>Tag: High-Risk Appliance: Gas</strong></td><td>PSR includes gas</td><td>CO alarm test; Visual inspection of connections</td><td>Maintenance</td><td>CO alarm test photo</td><td>Escalate anomalies immediately</td></tr>
-              <tr><td><strong>Tag: New Listing (0–30d)</strong></td><td>newly onboarded</td><td>Expanded photo matrix; Extra QA step requiring Ops sign-off</td><td>Assigned team + Ops</td><td>Full photo set incl. utility meters</td><td>Auto-expire after 30 days</td></tr>
+              <tr>
+                <td><strong>Tag: Pet-Friendly</strong></td>
+                <td>tag <code>Pet-Friendly</code></td>
+                <td>Lint-roll soft furnishings; Deodorise rugs; Garden sweep for droppings; Restock pet bags</td>
+                <td>Housekeeping</td>
+                <td>Before/after of living, rugs, entry</td>
+                <td>Align with PSR per property</td>
+              </tr>
+              <tr>
+                <td><strong>Tag: Spa/Pool</strong></td>
+                <td>tag <code>Spa/Pool</code></td>
+                <td>Test water (strip); Record pH/chlorine; Clean filter basket; Inspect cover & clips</td>
+                <td>Maintenance / Pool Tech</td>
+                <td>Photo of strip + readings</td>
+                <td>Weekly recurring + turnover spot-check</td>
+              </tr>
+              <tr>
+                <td><strong>Group: Jervis Bay North</strong></td>
+                <td>group membership</td>
+                <td>Sand mitigation (shake/replace entry mats; vacuum sand patterns); Rinse exterior shower</td>
+                <td>Housekeeping</td>
+                <td>Entry & living floor photos</td>
+                <td>High-sand-load properties</td>
+              </tr>
+              <tr>
+                <td><strong>Group: Jervis Bay South</strong></td>
+                <td>group membership</td>
+                <td>Outdoor salt-corrosion check; Lubricate hinges/latches</td>
+                <td>Maintenance</td>
+                <td>Close-up of fittings</td>
+                <td>Monthly recurring</td>
+              </tr>
+              <tr>
+                <td><strong>Group: Berry Hinterland</strong></td>
+                <td>group membership</td>
+                <td>Water tank level; Driveway erosion; Pest scan</td>
+                <td>Maintenance</td>
+                <td>Tank gauge; driveway edge photo</td>
+                <td>Increase after heavy rain</td>
+              </tr>
+              <tr>
+                <td><strong>Tag: Owner-Stay</strong></td>
+                <td>tag <code>Owner-Stay</code></td>
+                <td>Linen inventory count; Secure owner cupboard; Restock hamper</td>
+                <td>Housekeeping</td>
+                <td>Linen count; cupboard sealed</td>
+                <td>Trigger on owner stays</td>
+              </tr>
+              <tr>
+                <td><strong>Tag: High-Risk Appliance: Gas</strong></td>
+                <td>PSR includes gas</td>
+                <td>CO alarm test; Visual inspection of connections</td>
+                <td>Maintenance</td>
+                <td>CO alarm test photo</td>
+                <td>Escalate anomalies immediately</td>
+              </tr>
+              <tr>
+                <td><strong>Tag: New Listing (0–30d)</strong></td>
+                <td>newly onboarded</td>
+                <td>Expanded photo matrix; Extra QA step requiring Ops sign-off</td>
+                <td>Assigned team + Ops</td>
+                <td>Full photo set incl. utility meters</td>
+                <td>Auto-expire after 30 days</td>
+              </tr>
+              <tr>
+                <td><strong>Trade: Electrician</strong></td>
+                <td>category Electrical OR tag <code>Trade: Electrician</code></td>
+                <td>Isolate circuit/breaker; Prove dead; RCD test; Label/update circuits; Repair/replace; Restore power & verify; Attach compliance/job card</td>
+                <td>Maintenance – Electrician Lead</td>
+                <td>Switchboard photo + RCD test</td>
+                <td>Attach compliance card if required</td>
+              </tr>
+              <tr>
+                <td><strong>Trade: Plumbing</strong></td>
+                <td>category Plumbing OR tag <code>Trade: Plumbing</code></td>
+                <td>Isolate water; Meter before/after; Diagnose & repair; Pressure test; Clean-up; Water-on verification; Attach compliance/job card</td>
+                <td>Maintenance – Plumber Lead</td>
+                <td>Valve + meter photos; repair area</td>
+                <td>Document parts used</td>
+              </tr>
             </tbody>
           </table>
+          <h4>Quick Build Workflow — Trade Modifiers</h4>
+          <ol>
+            <li>Create/verify tags <code>Trade: Electrician</code> and <code>Trade: Plumbing</code> (or rely on Maintenance categories Electrical/Plumbing).</li>
+            <li>Open the target template → Add modifier: trigger on tag or category → insert the steps above and set assignee to the relevant trade lead/team.</li>
+            <li>Require a photo step for evidence (switchboard + RCD for Electrical; valve/meter + repair area for Plumbing).</li>
+            <li>Save → create a test task per trade → verify steps and assignee populate. (If creating from Maintenance tab does not pull defaults, use Task hub → New Task, then link back.)</li>
+          </ol>
         `
       },
       {
@@ -236,7 +376,9 @@
         extra: `
           <h3>Recurring Task Profiles by Group (PHH Standard)</h3>
           <table>
-            <thead><tr><th>Group</th><th>Weekly Cadence</th><th>Sample Tasks</th><th>Notes</th></tr></thead>
+            <thead>
+              <tr><th>Group</th><th>Weekly Cadence</th><th>Sample Tasks</th><th>Notes</th></tr>
+            </thead>
             <tbody>
               <tr><td><strong>Jervis Bay North</strong></td><td>Tue/Thu</td><td>Spa/Pool checks; Sand mitigation audit</td><td>Avoid Mon (heavy turnovers)</td></tr>
               <tr><td><strong>Jervis Bay South</strong></td><td>Wed/Fri</td><td>Outdoor corrosion check; Garden tidy</td><td>Pair with maintenance runs</td></tr>
@@ -317,61 +459,120 @@
       }
     ];
 
-    // === DOM Build ===
+    // =========================
+    // DOM Construction Helpers
+    // =========================
     const container = document.getElementById('modules');
     let completed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     if (!Array.isArray(completed) || completed.length !== modules.length) {
       completed = new Array(modules.length).fill(false);
     }
 
-    const makeCard = (m, index) => {
-      const card = document.createElement('div'); card.className = 'card'; card.dataset.index = index;
-      const header = document.createElement('div'); header.className = 'card-header';
-      const h2 = document.createElement('h2'); h2.textContent = m.title;
-      const pill = document.createElement('span'); pill.className = 'kpill'; pill.innerHTML = `KB <span>→</span> <a href="${m.kbUrl}" target="_blank" rel="noopener">${m.kb}</a>`;
-      const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.className = 'complete'; checkbox.title = 'Mark module complete'; checkbox.checked = !!completed[index];
-      header.appendChild(h2); header.appendChild(pill); header.appendChild(checkbox);
+    function makeCard(m, index) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.index = index;
 
-      const body = document.createElement('div'); body.className = 'card-body';
+      const header = document.createElement('div');
+      header.className = 'card-header';
+
+      const h2 = document.createElement('h2');
+      h2.textContent = m.title;
+
+      const pill = document.createElement('span');
+      pill.className = 'kpill';
+      pill.innerHTML = `KB <span>→</span> <a href="${m.kbUrl}" target="_blank" rel="noopener">${m.kb}</a>`;
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'complete';
+      checkbox.title = 'Mark module complete';
+      checkbox.checked = !!completed[index];
+
+      header.appendChild(h2);
+      header.appendChild(pill);
+      header.appendChild(checkbox);
+
+      const body = document.createElement('div');
+      body.className = 'card-body';
+
       const list = document.createElement('ol');
-      m.steps.forEach(s => { const li = document.createElement('li'); li.textContent = s; list.appendChild(li); });
+      m.steps.forEach((s) => {
+        const li = document.createElement('li');
+        li.textContent = s;
+        list.appendChild(li);
+      });
       body.appendChild(list);
-      const best = document.createElement('p'); best.className = 'best-practice'; best.textContent = '✅ Best Practice: ' + m.best; body.appendChild(best);
-      if (m.extra) { const extra = document.createElement('div'); extra.innerHTML = m.extra; body.appendChild(extra); }
-      const sub = document.createElement('p'); sub.className = 'subtle'; sub.textContent = 'Tip: Add screenshots here when available.'; body.appendChild(sub);
 
-      header.addEventListener('click', (e) => { if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'A') { body.style.display = body.style.display==='block' ? 'none' : 'block'; }});
-      checkbox.addEventListener('change', () => { completed[index] = checkbox.checked; saveProgress(); updateProgressBar(); });
+      const best = document.createElement('p');
+      best.className = 'best-practice';
+      best.textContent = '✅ Best Practice: ' + m.best;
+      body.appendChild(best);
 
-      card.appendChild(header); card.appendChild(body);
+      if (m.extra) {
+        const extra = document.createElement('div');
+        extra.innerHTML = m.extra;
+        body.appendChild(extra);
+      }
+
+      const sub = document.createElement('p');
+      sub.className = 'subtle';
+      sub.textContent = 'Tip: Add screenshots here when available.';
+      body.appendChild(sub);
+
+      // Interactions
+      header.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'A') {
+          body.style.display = body.style.display === 'block' ? 'none' : 'block';
+        }
+      });
+
+      checkbox.addEventListener('change', () => {
+        completed[index] = checkbox.checked;
+        saveProgress();
+        updateProgressBar();
+      });
+
+      card.appendChild(header);
+      card.appendChild(body);
       return card;
-    };
+    }
 
     modules.forEach((m, i) => container.appendChild(makeCard(m, i)));
 
-    // === Progress ===
+    // =========================
+    // Progress Bar & Persistence
+    // =========================
     const bar = document.getElementById('progressBar');
-    function updateProgressBar(){
+
+    function updateProgressBar() {
       const count = completed.filter(Boolean).length;
-      bar.style.width = `${(count/modules.length)*100}%`;
+      bar.style.width = `${(count / modules.length) * 100}%`;
       bar.textContent = `${count} / ${modules.length} Modules Complete`;
     }
-    function saveProgress(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(completed)); }
+
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
+    }
 
     updateProgressBar();
 
-    // === Controls ===
+    // =========================
+    // Toolbar Controls
+    // =========================
     document.getElementById('expandAll').addEventListener('click', () => {
-      document.querySelectorAll('.card-body').forEach(b => b.style.display = 'block');
+      document.querySelectorAll('.card-body').forEach((b) => (b.style.display = 'block'));
     });
+
     document.getElementById('collapseAll').addEventListener('click', () => {
-      document.querySelectorAll('.card-body').forEach(b => b.style.display = 'none');
+      document.querySelectorAll('.card-body').forEach((b) => (b.style.display = 'none'));
     });
+
     document.getElementById('reset').addEventListener('click', () => {
       if (confirm('Reset progress for all modules?')) {
         completed = new Array(modules.length).fill(false);
         saveProgress();
-        document.querySelectorAll('.complete').forEach(c => c.checked = false);
+        document.querySelectorAll('.complete').forEach((c) => (c.checked = false));
         updateProgressBar();
       }
     });
