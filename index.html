@@ -92,7 +92,7 @@
     <div>© Professional Holiday Homes — Breezeway Operations. This guide mirrors the Master KB and PHH policies. Report inaccuracies to Ops.</div>
   </footer>
 
-  <script>
+  <script defer>
     // Storage key bumped to reset stale progress if needed
     const STORAGE_KEY = "phh-breezeway-v1-3";
 
@@ -288,10 +288,29 @@
     // Build UI
     // =========================
     const container = document.getElementById("modules");
-    let completed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    if (!Array.isArray(completed) || completed.length !== modules.length) {
-      completed = new Array(modules.length).fill(false);
-    }
+    const store = (() => {
+  try {
+    const testKey = STORAGE_KEY + "_test";
+    localStorage.setItem(testKey, "1");
+    localStorage.removeItem(testKey);
+    return {
+      get: () => JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"),
+      set: (v) => localStorage.setItem(STORAGE_KEY, JSON.stringify(v)),
+      ok: true
+    };
+  } catch (e) {
+    let mem = [];
+    return {
+      get: () => mem,
+      set: (v) => { mem = v; },
+      ok: false
+    };
+  }
+})();
+let completed = store.get();
+if (!Array.isArray(completed) || completed.length !== modules.length) {
+  completed = new Array(modules.length).fill(false);
+}
 
     function makeCard(m, index){
       const card = document.createElement("div"); card.className = "card"; card.dataset.index = index;
@@ -318,7 +337,7 @@
     // Progress & controls
     const bar = document.getElementById("progressBar");
     function updateProgressBar(){ const count = completed.filter(Boolean).length; bar.style.width = `${(count/modules.length)*100}%`; bar.textContent = `${count} / ${modules.length} Modules Complete`; }
-    function saveProgress(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(completed)); }
+    function saveProgress(){ try { store.set(completed); } catch(e){} }
     updateProgressBar();
 
     document.getElementById("expandAll").addEventListener("click", () => { document.querySelectorAll(".card-body").forEach(b => b.style.display = "block"); });
