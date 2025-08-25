@@ -222,12 +222,12 @@
         kb: 'Properties / Groups / Tags — Master KB',
         kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
         steps: [
-          'Create Buildings for multi-structure homes (Main House, Studio, Garage).',
-          'Assign Groups for routing/reporting (e.g., Jervis Bay — Pet-Friendly, Spa/Pool Properties).',
-          'Apply Tags for operational modifiers (Pet-Friendly, Spa/Pool, Owner-Stay).',
+          'Assign Groups by Town for routing/reporting (e.g., Vincentia, Huskisson, Berry, Kangaroo Valley).',
+          'Apply reporting tags: Spa/Pool, Waterfront, Pet-Friendly; Gas Monitoring — High Use / Regular Use / Low Use; Gas — Opt Out.',
+          'Add tag "Maintenance — Owner Opt Out" on properties where the owner is the sole maintenance provider.',
           'Record Property-Specific Requirements (PSRs) in notes and mirror into the Master KB.'
         ],
-        best: 'Use Groups for assignment/report rollups; Tags for template modifiers and evidence rules.'
+        best: 'PHH uses Groups = Town. Use Tags for reporting and template modifiers. Buildings are not used at PHH.'
       },
       {
         id: 'm2',
@@ -359,6 +359,8 @@
             <li>Require a photo step for evidence (switchboard + RCD for Electrical; valve/meter + repair area for Plumbing).</li>
             <li>Save → create a test task per trade → verify steps and assignee populate. (If creating from Maintenance tab does not pull defaults, use Task hub → New Task, then link back.)</li>
           </ol>
+          <h4>Reporting Tags (visibility only)</h4>
+          <p class="subtle">Gas Monitoring — High Use / Regular Use / Low Use, and Gas — Opt Out are used for <em>reporting and policy</em>. Do not auto-append steps from these tags. Gas bottle checks remain in Process Street.</p>
         `
       },
       {
@@ -392,8 +394,9 @@
             <li><strong>Maintenance – Pool Tech</strong> → All <code>Spa/Pool</code> tagged properties.</li>
             <li><strong>Maintenance – General</strong> → By region group; escalate to specialist trades per PSR.</li>
           </ul>
+          <p class="subtle">Note: Gas bottle checks continue to be managed in Process Street, not Breezeway. Do not create recurring gas tasks here.</p>
         `
-      },
+      }
       {
         id: 'm5',
         title: 'Module 5 — Field App Execution (Housekeeping & Maintenance)',
@@ -415,10 +418,11 @@
         steps: [
           'Owners: keep comms via email unless an owner-user is provisioned in Breezeway.',
           'Use in-task comments for internal notes; avoid placing owner emails in public threads.',
+          'Use tag "Maintenance — Owner Opt Out" where owner is default service provider; email the report to owner and then close the Breezeway task after responsibility is transferred.',
           'For >$330 owner-responsible work: email report to owner from PHH; then close the task in Breezeway to transfer responsibility.'
         ],
         best: 'Stamp key decisions/approvals in task notes with time and staff initials.'
-      },
+      }
       {
         id: 'm7',
         title: 'Module 7 — Reporting & Analytics',
