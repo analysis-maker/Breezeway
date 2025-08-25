@@ -1,138 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!--
-    Professional Holiday Homes — Breezeway Staff Training (Readable Source)
-    Version: v1.2 (Branded, Readable)
-
-    Deployment (Option A):
-      - Save this file as index.html at your repo root or web root
-      - Place these images in the SAME folder:
-          phhlogo_new_large-1.webp
-          Book-Only-266x300.jpg
-      - (Optional) add an empty .nojekyll file in the repo root for GitHub Pages
-
-    Notes:
-      - Progress persists per browser/device via localStorage key: phh-breezeway-v1-2
-      - Update MASTER KB & Orientation video links below if they change
-  -->
+  <!-- PHH Breezeway Staff Training — v1.3 (Readable, Fixed Modules)
+       Drop-in replacement for index.html. Images required in same folder:
+       - phhlogo_new_large-1.webp
+       - Book-Only-266x300.jpg -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Professional Holiday Homes — Breezeway Staff Training</title>
   <meta name="description" content="PHH Breezeway Staff Training — role-based SOPs with checklists, progress tracking, and links to the Master KB and Orientation video." />
   <link rel="icon" type="image/webp" href="phhlogo_new_large-1.webp" />
   <style>
-    /* =========================
-       PHH Brand & UI Variables
-       ========================= */
-    :root {
-      /* Brand palette (from PHH logo) */
-      --brand-1: #1691CF; /* primary */
-      --brand-2: #5AB4E8; /* gradient light */
-      --brand-ink: #0B5881; /* headings/ink */
-
-      /* UI palette */
-      --bg: #f7fbff;
-      --card: #ffffff;
-      --muted: #6b7280;
-      --accent: var(--brand-1);
-      --accent-2: #e7f4ff;
-      --shadow: rgba(13, 51, 80, 0.1);
-    }
-
-    /* Base */
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-        "Apple Color Emoji", "Segoe UI Emoji";
-      background: var(--bg);
-      margin: 0;
-      color: #111827;
-    }
-
-    /* Header */
-    .site-header {
-      position: sticky; top: 0; z-index: 100;
-      backdrop-filter: saturate(180%) blur(6px);
-      background:
-        linear-gradient(90deg, #ffffffcc 0%, #ffffffee 40%),
-        linear-gradient(90deg, var(--brand-1), var(--brand-2));
-      border-bottom: 1px solid #e5e7eb;
-    }
-    .header-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: grid; grid-template-columns: auto 1fr auto;
-      align-items: center; gap: 1rem; padding: .6rem 1rem;
-    }
-    .brand { display: flex; align-items: center; gap: .75rem; }
-    .brand img { height: 40px; width: auto; display: block; }
-    .brand-title { font-weight: 700; color: var(--brand-ink); letter-spacing: .2px; }
-    .cta { display: flex; gap: .5rem; flex-wrap: wrap; }
-
-    .btn {
-      background: var(--accent); color:#fff; border:0; border-radius: .65rem;
-      padding:.5rem .8rem; cursor:pointer; box-shadow:0 2px 6px var(--shadow);
-      font-weight:600;
-    }
-    .btn.alt { background: #111827; }
-    .btn.link { background: transparent; color: var(--accent); box-shadow:none; text-decoration: underline; padding:0; }
-
-    /* Main */
-    .container { max-width: 1100px; margin: 0 auto; padding: 1rem; }
-    .lead { margin: .75rem 0 1rem; color: var(--muted); }
-
-    .toolbar { display:flex; gap:.5rem; align-items:center; margin:.5rem 0 1rem; flex-wrap:wrap; }
-
-    .progress { background: #e5e7eb; border-radius: 9999px; height: 20px; overflow: hidden; margin:.25rem 0 1.25rem; }
-    .progress-bar {
-      background: linear-gradient(90deg, var(--brand-1), var(--brand-2));
-      height:100%; color: white; text-align:center; white-space:nowrap; transition: width 0.4s; font-size:.85rem;
-    }
-
-    .banner { background: var(--accent-2); border-left:4px solid var(--accent); padding:1rem; border-radius:.9rem; margin:0 0 1rem 0; }
-    .muted { color: var(--muted); }
-
-    .card { background: var(--card); border-radius: 1rem; box-shadow: 0 2px 6px var(--shadow); margin: 0 0 1rem 0; overflow:hidden; }
-    .card-header { padding: 1rem; display:flex; align-items:center; gap:.5rem; cursor:pointer; }
-    .card-header h2 { flex:1; font-size: 1.05rem; margin: 0; }
-    .card-body { padding: 0 1rem 1rem 1rem; display:none; }
-    .card-body ol, .card-body ul { margin:.5rem 0; padding-left:1.25rem; }
-
-    .kpill { display:inline-flex; align-items:center; gap:.4rem; background:#eef2ff; color:#3730a3; border-radius:9999px; padding:.25rem .6rem; font-size:.8rem; margin-left:.5rem; }
-    .complete { margin-left: .5rem; }
-    .best-practice { color:#047857; font-weight:600; margin-top:.4rem; }
-    .subtle { font-style: italic; color: var(--muted); }
-
-    .resources { background:#f3f4f6; border-radius:.75rem; padding:.75rem; }
-    .kblist { display:flex; gap:.75rem; flex-wrap:wrap; }
-
-    table { border-collapse: collapse; width:100%; margin:.5rem 0; }
-    th, td { border:1px solid #e5e7eb; padding:.5rem; text-align:left; vertical-align:top; }
-    th { background:#f9fafb; }
-
-    /* Footer */
-    .footer {
-      margin: 1rem auto 2rem; max-width: 1100px; padding: 0 1rem;
-      font-size:.9rem; color: var(--muted); display:flex; gap:1rem; align-items:center;
-    }
-    .footer img { height: 48px; width:auto; border-radius:.5rem; }
-
-    @media (max-width: 640px) {
-      .header-inner { grid-template-columns: 1fr auto; }
-      .brand-title { display: none; }
-    }
+    :root { --brand-1:#1691CF; --brand-2:#5AB4E8; --brand-ink:#0B5881; --bg:#f7fbff; --card:#ffffff; --muted:#6b7280; --accent:var(--brand-1); --accent-2:#e7f4ff; --shadow:rgba(13,51,80,0.1);}    
+    *{box-sizing:border-box} html,body{height:100%} body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";background:var(--bg);margin:0;color:#111827}
+    .site-header{position:sticky;top:0;z-index:100;backdrop-filter:saturate(180%) blur(6px);background:linear-gradient(90deg,#ffffffcc 0%,#ffffffee 40%),linear-gradient(90deg,var(--brand-1),var(--brand-2));border-bottom:1px solid #e5e7eb}
+    .header-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1rem;padding:.6rem 1rem}
+    .brand{display:flex;align-items:center;gap:.75rem} .brand img{height:40px;width:auto;display:block} .brand-title{font-weight:700;color:var(--brand-ink);letter-spacing:.2px}
+    .cta{display:flex;gap:.5rem;flex-wrap:wrap}
+    .btn{background:var(--accent);color:#fff;border:0;border-radius:.65rem;padding:.5rem .8rem;cursor:pointer;box-shadow:0 2px 6px var(--shadow);font-weight:600} .btn.alt{background:#111827}
+    .container{max-width:1100px;margin:0 auto;padding:1rem} .lead{margin:.75rem 0 1rem;color:var(--muted)} .toolbar{display:flex;gap:.5rem;align-items:center;margin:.5rem 0 1rem;flex-wrap:wrap}
+    .progress{background:#e5e7eb;border-radius:9999px;height:20px;overflow:hidden;margin:.25rem 0 1.25rem} .progress-bar{background:linear-gradient(90deg,var(--brand-1),var(--brand-2));height:100%;color:#fff;text-align:center;white-space:nowrap;transition:width .4s;font-size:.85rem}
+    .banner{background:var(--accent-2);border-left:4px solid var(--accent);padding:1rem;border-radius:.9rem;margin:0 0 1rem 0} .muted{color:var(--muted)}
+    .card{background:var(--card);border-radius:1rem;box-shadow:0 2px 6px var(--shadow);margin:0 0 1rem 0;overflow:hidden} .card-header{padding:1rem;display:flex;align-items:center;gap:.5rem;cursor:pointer}
+    .card-header h2{flex:1;font-size:1.05rem;margin:0} .card-body{padding:0 1rem 1rem 1rem;display:none} .card-body ol,.card-body ul{margin:.5rem 0;padding-left:1.25rem}
+    .kpill{display:inline-flex;align-items:center;gap:.4rem;background:#eef2ff;color:#3730a3;border-radius:9999px;padding:.25rem .6rem;font-size:.8rem;margin-left:.5rem}
+    .complete{margin-left:.5rem} .best-practice{color:#047857;font-weight:600;margin-top:.4rem} .subtle{font-style:italic;color:var(--muted)}
+    .resources{background:#f3f4f6;border-radius:.75rem;padding:.75rem} .kblist{display:flex;gap:.75rem;flex-wrap:wrap}
+    table{border-collapse:collapse;width:100%;margin:.5rem 0} th,td{border:1px solid #e5e7eb;padding:.5rem;text-align:left;vertical-align:top} th{background:#f9fafb}
+    .footer{margin:1rem auto 2rem;max-width:1100px;padding:0 1rem;font-size:.9rem;color:var(--muted);display:flex;gap:1rem;align-items:center} .footer img{height:48px;width:auto;border-radius:.5rem}
+    @media(max-width:640px){.header-inner{grid-template-columns:1fr auto}.brand-title{display:none}}
   </style>
 </head>
 <body>
-  <!-- ===== Header ===== -->
   <header class="site-header">
     <div class="header-inner">
       <div class="brand">
         <img src="phhlogo_new_large-1.webp" alt="Professional Holiday Homes logo" />
         <div class="brand-title">Breezeway Staff Training</div>
       </div>
-      <div><!-- spacer --></div>
+      <div></div>
       <div class="cta">
         <a class="btn" href="https://us02web.zoom.us/rec/share/Wlm8sbXJkROUV_k7BP4VBMv0tcQF9Iv8mxJSHQTQU4LPaTsOW-rv5-IxkINd_7SU.epRRfU1FgHW2Qfxt" target="_blank" rel="noopener">▶️ Orientation Video</a>
         <a class="btn alt" href="https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197" target="_blank" rel="noopener">📄 Master KB</a>
@@ -140,25 +46,19 @@
     </div>
   </header>
 
-  <!-- ===== Main ===== -->
   <main class="container">
     <h1>PHH Breezeway Staff Training — Role-Based SOPs</h1>
     <p class="lead">Implementation-ready, with checklists your team can tick off as they go. Progress saves automatically in this browser.</p>
-
     <div class="toolbar">
       <button id="expandAll" class="btn alt" type="button">Expand all</button>
       <button id="collapseAll" class="btn alt" type="button">Collapse all</button>
       <button id="reset" class="btn" type="button">Reset progress</button>
-      <span class="muted">Version: <strong>v1.2 (Branded, Readable)</strong> • Key: <code>phh-breezeway-v1-2</code></span>
+      <span class="muted">Version: <strong>v1.3 (Branded, Readable)</strong> • Key: <code>phh-breezeway-v1-3</code></span>
     </div>
-
-    <div class="progress" aria-label="Course progress">
-      <div id="progressBar" class="progress-bar">0 / 10 Modules Complete</div>
-    </div>
+    <div class="progress" aria-label="Course progress"><div id="progressBar" class="progress-bar">0 / 10 Modules Complete</div></div>
 
     <div class="banner">
-      <strong>Start here — Orientation (Mandatory):</strong>
-      Watch the PHH Intro Video, then complete Module 0 before anything else.
+      <strong>Start here — Orientation (Mandatory):</strong> Watch the PHH Intro Video, then complete Module 0 before anything else.
       <div class="kblist" style="margin-top:.5rem;">
         <a class="btn" href="https://us02web.zoom.us/rec/share/Wlm8sbXJkROUV_k7BP4VBMv0tcQF9Iv8mxJSHQTQU4LPaTsOW-rv5-IxkINd_7SU.epRRfU1FgHW2Qfxt" target="_blank" rel="noopener">▶️ Watch Orientation Video</a>
         <a class="btn" href="https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197" target="_blank" rel="noopener">📄 Open Master KB (Agenda)</a>
@@ -166,7 +66,6 @@
     </div>
 
     <p class="muted">Click a module row to expand/collapse details. Tick the checkbox to mark a module complete.</p>
-
     <div id="modules"></div>
 
     <div class="card" style="background:#eef7ff;">
@@ -188,168 +87,92 @@
     </div>
   </main>
 
-  <!-- ===== Footer ===== -->
   <footer class="footer">
     <img src="Book-Only-266x300.jpg" alt="The Professional Holiday Home — by Craig Reid" />
     <div>© Professional Holiday Homes — Breezeway Operations. This guide mirrors the Master KB and PHH policies. Report inaccuracies to Ops.</div>
   </footer>
 
   <script>
-    // =========================
-    // Config & Data
-    // =========================
-    const STORAGE_KEY = 'phh-breezeway-v1-2';
+    // Storage key bumped to reset stale progress if needed
+    const STORAGE_KEY = "phh-breezeway-v1-3";
 
-    // Each module has: id, title, kb, kbUrl, steps[], best, (optional) extra HTML
+    // =========================
+    // Module data (use double quotes to avoid quote-escaping issues)
+    // =========================
     const modules = [
       {
-        id: 'm0',
-        title: 'Module 0 — Orientation & Access (All Staff)',
-        kb: 'Onboarding & Access — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
+        id: "m0",
+        title: "Module 0 — Orientation & Access (All Staff)",
+        kb: "Onboarding & Access — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
         steps: [
-          'Watch the PHH Intro Video (zoom link above).',
-          'Sign in to Breezeway (web) with PHH SSO/invite.',
-          'Install the Breezeway mobile app, sign in, enable notifications.',
-          'Enable offline sync + GPS tagging in the app settings.',
-          'Confirm your role and property visibility are correct.'
+          "Watch the PHH Intro Video (zoom link above).",
+          "Sign in to Breezeway (web) with PHH SSO/invite.",
+          "Install the Breezeway mobile app, sign in, enable notifications.",
+          "Enable offline sync + GPS tagging in the app settings.",
+          "Confirm your role and property visibility are correct."
         ],
-        best: 'Enable offline sync before fieldwork; keep GPS tagging on for visit verification.'
+        best: "Enable offline sync before fieldwork; keep GPS tagging on for visit verification."
       },
       {
-        id: 'm1',
-        title: 'Module 1 — Property Structure: Buildings, Groups, Tags',
-        kb: 'Properties / Groups / Tags — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
+        id: "m1",
+        title: "Module 1 — Property Structure: Buildings, Groups, Tags",
+        kb: "Properties / Groups / Tags — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
         steps: [
-          'Assign Groups by Town for routing/reporting (e.g., Vincentia, Huskisson, Berry, Kangaroo Valley).',
-          'Apply reporting tags: Spa/Pool, Waterfront, Pet-Friendly; Gas Monitoring — High Use / Regular Use / Low Use; Gas — Opt Out.',
-          'Add tag "Maintenance — Owner Opt Out" on properties where the owner is the sole maintenance provider.',
-          'Record Property-Specific Requirements (PSRs) in notes and mirror into the Master KB.'
+          "Assign Groups by Town for routing/reporting (e.g., Vincentia, Huskisson, Berry, Kangaroo Valley).",
+          "Apply reporting tags: Spa/Pool, Waterfront, Pet-Friendly; Gas Monitoring — High Use / Regular Use / Low Use; Gas — Opt Out.",
+          "Add tag 'Maintenance — Owner Opt Out' on properties where the owner is the sole maintenance provider.",
+          "Record Property-Specific Requirements (PSRs) in notes and mirror into the Master KB."
         ],
-        best: 'PHH uses Groups = Town. Use Tags for reporting and template modifiers. Buildings are not used at PHH.'
+        best: "PHH uses Groups = Town. Use Tags for reporting and template modifiers. Buildings are not used at PHH."
       },
       {
-        id: 'm2',
-        title: 'Module 2 — Users & Devices',
-        kb: 'Users & Trades — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
+        id: "m2",
+        title: "Module 2 — Users & Devices",
+        kb: "Users & Trades — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
         steps: [
-          'Create users and assign roles (Housekeeping, Maintenance, Dispatcher/Admin, Ops).',
-          'Add external trades as Maintenance users; set trade specialty; restrict scope.',
-          'Note: Owners cannot submit maintenance unless created as users; default to email comms.',
-          'Verify each new user logs into mobile and completes a test task with a photo.'
+          "Create users and assign roles (Housekeeping, Maintenance, Dispatcher/Admin, Ops).",
+          "Add external trades as Maintenance users; set trade specialty; restrict scope.",
+          "Note: Owners cannot submit maintenance unless created as users; default to email comms.",
+          "Verify each new user logs into mobile and completes a test task with a photo."
         ],
-        best: 'Adopt a naming convention for trades (e.g., "Trade – Company – Firstname") for fast routing and search.'
+        best: "Adopt a naming convention for trades (e.g., 'Trade – Company – Firstname') for fast routing and search."
       },
       {
-        id: 'm3',
-        title: 'Module 3 — Templates & Template Modifiers',
-        kb: 'Templates & Modifiers — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
+        id: "m3",
+        title: "Module 3 — Templates & Template Modifiers",
+        kb: "Templates & Modifiers — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
         steps: [
-          'Create/verify housekeeping templates: Standard Turnover, Mid-Stay Refresh, Spring Clean.',
-          'Create maintenance templates: Spa/Pool checks, Safety audits, Appliance resets, Emergency response.',
-          'Configure template modifiers that add/remove steps based on Tags and Groups.',
-          'Set default assignees by Group/Tag for HK vs Maintenance.',
-          'Known limitation: Tasks created from the Maintenance tab may not pull defaults — use Task hub → New Task and link back.'
+          "Create/verify housekeeping templates: Standard Turnover, Mid-Stay Refresh, Spring Clean.",
+          "Create maintenance templates: Spa/Pool checks, Safety audits, Appliance resets, Emergency response.",
+          "Configure template modifiers that add/remove steps based on Tags and Groups.",
+          "Set default assignees by Group/Tag for HK vs Maintenance.",
+          "Known limitation: Tasks created from the Maintenance tab may not pull defaults — use Task hub → New Task and link back."
         ],
-        best: 'Use short, verb-first step names and place photo-required steps near completion to reduce misses.',
+        best: "Use short, verb-first step names and place photo-required steps near completion to reduce misses.",
         extra: `
           <h3>Modifier Packs — Per-Group & Tag (PHH Standard)</h3>
           <div class="subtle">Configure these as template modifiers; mirror the matrix in the Master KB.</div>
           <table>
             <thead>
               <tr>
-                <th>Scope</th>
-                <th>Trigger</th>
-                <th>Added Steps</th>
-                <th>Default Assignee</th>
-                <th>Evidence</th>
-                <th>Notes</th>
+                <th>Scope</th><th>Trigger</th><th>Added Steps</th><th>Default Assignee</th><th>Evidence</th><th>Notes</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><strong>Tag: Pet-Friendly</strong></td>
-                <td>tag <code>Pet-Friendly</code></td>
-                <td>Lint-roll soft furnishings; Deodorise rugs; Garden sweep for droppings; Restock pet bags</td>
-                <td>Housekeeping</td>
-                <td>Before/after of living, rugs, entry</td>
-                <td>Align with PSR per property</td>
-              </tr>
-              <tr>
-                <td><strong>Tag: Spa/Pool</strong></td>
-                <td>tag <code>Spa/Pool</code></td>
-                <td>Test water (strip); Record pH/chlorine; Clean filter basket; Inspect cover & clips</td>
-                <td>Maintenance / Pool Tech</td>
-                <td>Photo of strip + readings</td>
-                <td>Weekly recurring + turnover spot-check</td>
-              </tr>
-              <tr>
-                <td><strong>Group: Jervis Bay North</strong></td>
-                <td>group membership</td>
-                <td>Sand mitigation (shake/replace entry mats; vacuum sand patterns); Rinse exterior shower</td>
-                <td>Housekeeping</td>
-                <td>Entry & living floor photos</td>
-                <td>High-sand-load properties</td>
-              </tr>
-              <tr>
-                <td><strong>Group: Jervis Bay South</strong></td>
-                <td>group membership</td>
-                <td>Outdoor salt-corrosion check; Lubricate hinges/latches</td>
-                <td>Maintenance</td>
-                <td>Close-up of fittings</td>
-                <td>Monthly recurring</td>
-              </tr>
-              <tr>
-                <td><strong>Group: Berry Hinterland</strong></td>
-                <td>group membership</td>
-                <td>Water tank level; Driveway erosion; Pest scan</td>
-                <td>Maintenance</td>
-                <td>Tank gauge; driveway edge photo</td>
-                <td>Increase after heavy rain</td>
-              </tr>
-              <tr>
-                <td><strong>Tag: Owner-Stay</strong></td>
-                <td>tag <code>Owner-Stay</code></td>
-                <td>Linen inventory count; Secure owner cupboard; Restock hamper</td>
-                <td>Housekeeping</td>
-                <td>Linen count; cupboard sealed</td>
-                <td>Trigger on owner stays</td>
-              </tr>
-              <tr>
-                <td><strong>Tag: High-Risk Appliance: Gas</strong></td>
-                <td>PSR includes gas</td>
-                <td>CO alarm test; Visual inspection of connections</td>
-                <td>Maintenance</td>
-                <td>CO alarm test photo</td>
-                <td>Escalate anomalies immediately</td>
-              </tr>
-              <tr>
-                <td><strong>Tag: New Listing (0–30d)</strong></td>
-                <td>newly onboarded</td>
-                <td>Expanded photo matrix; Extra QA step requiring Ops sign-off</td>
-                <td>Assigned team + Ops</td>
-                <td>Full photo set incl. utility meters</td>
-                <td>Auto-expire after 30 days</td>
-              </tr>
-              <tr>
-                <td><strong>Trade: Electrician</strong></td>
-                <td>category Electrical OR tag <code>Trade: Electrician</code></td>
-                <td>Isolate circuit/breaker; Prove dead; RCD test; Label/update circuits; Repair/replace; Restore power & verify; Attach compliance/job card</td>
-                <td>Maintenance – Electrician Lead</td>
-                <td>Switchboard photo + RCD test</td>
-                <td>Attach compliance card if required</td>
-              </tr>
-              <tr>
-                <td><strong>Trade: Plumbing</strong></td>
-                <td>category Plumbing OR tag <code>Trade: Plumbing</code></td>
-                <td>Isolate water; Meter before/after; Diagnose & repair; Pressure test; Clean-up; Water-on verification; Attach compliance/job card</td>
-                <td>Maintenance – Plumber Lead</td>
-                <td>Valve + meter photos; repair area</td>
-                <td>Document parts used</td>
-              </tr>
+              <tr><td><strong>Tag: Pet-Friendly</strong></td><td>tag <code>Pet-Friendly</code></td><td>Lint-roll soft furnishings; Deodorise rugs; Garden sweep for droppings; Restock pet bags</td><td>Housekeeping</td><td>Before/after of living, rugs, entry</td><td>Align with PSR per property</td></tr>
+              <tr><td><strong>Tag: Spa/Pool</strong></td><td>tag <code>Spa/Pool</code></td><td>Test water (strip); Record pH/chlorine; Clean filter basket; Inspect cover & clips</td><td>Maintenance / Pool Tech</td><td>Photo of strip + readings</td><td>Weekly recurring + turnover spot-check</td></tr>
+              <tr><td><strong>Group: Jervis Bay North</strong></td><td>group membership</td><td>Sand mitigation (shake/replace entry mats; vacuum sand patterns); Rinse exterior shower</td><td>Housekeeping</td><td>Entry & living floor photos</td><td>High-sand-load properties</td></tr>
+              <tr><td><strong>Group: Jervis Bay South</strong></td><td>group membership</td><td>Outdoor salt-corrosion check; Lubricate hinges/latches</td><td>Maintenance</td><td>Close-up of fittings</td><td>Monthly recurring</td></tr>
+              <tr><td><strong>Group: Berry Hinterland</strong></td><td>group membership</td><td>Water tank level; Driveway erosion; Pest scan</td><td>Maintenance</td><td>Tank gauge; driveway edge photo</td><td>Increase after heavy rain</td></tr>
+              <tr><td><strong>Tag: Owner-Stay</strong></td><td>tag <code>Owner-Stay</code></td><td>Linen inventory count; Secure owner cupboard; Restock hamper</td><td>Housekeeping</td><td>Linen count; cupboard sealed</td><td>Trigger on owner stays</td></tr>
+              <tr><td><strong>Tag: High-Risk Appliance: Gas</strong></td><td>PSR includes gas</td><td>CO alarm test; Visual inspection of connections</td><td>Maintenance</td><td>CO alarm test photo</td><td>Escalate anomalies immediately</td></tr>
+              <tr><td><strong>Tag: New Listing (0–30d)</strong></td><td>newly onboarded</td><td>Expanded photo matrix; Extra QA step requiring Ops sign-off</td><td>Assigned team + Ops</td><td>Full photo set incl. utility meters</td><td>Auto-expire after 30 days</td></tr>
+              <tr><td><strong>Trade: Electrician</strong></td><td>category Electrical OR tag <code>Trade: Electrician</code></td><td>Isolate circuit/breaker; Prove dead; RCD test; Label/update circuits; Repair/replace; Restore power & verify; Attach compliance/job card</td><td>Maintenance – Electrician Lead</td><td>Switchboard photo + RCD test</td><td>Attach compliance card if required</td></tr>
+              <tr><td><strong>Trade: Plumbing</strong></td><td>category Plumbing OR tag <code>Trade: Plumbing</code></td><td>Isolate water; Meter before/after; Diagnose & repair; Pressure test; Clean-up; Water-on verification; Attach compliance/job card</td><td>Maintenance – Plumber Lead</td><td>Valve + meter photos; repair area</td><td>Document parts used</td></tr>
             </tbody>
           </table>
           <h4>Quick Build Workflow — Trade Modifiers</h4>
@@ -364,23 +187,21 @@
         `
       },
       {
-        id: 'm4',
-        title: 'Module 4 — Task Creation, Scheduling & Automation',
-        kb: 'Scheduling & Automation — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
+        id: "m4",
+        title: "Module 4 — Task Creation, Scheduling & Automation",
+        kb: "Scheduling & Automation — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
         steps: [
-          'Confirm PMS integration auto-creates turnovers with correct dates and property mapping.',
-          'Create recurring tasks: weekly spa checks, monthly smoke alarms, quarterly deep cleans.',
-          'For ad-hoc maintenance, use Task hub → New Task (to pull template defaults), then link to the maintenance issue.',
-          'Use map view and route planning to assign work by roster and region.'
+          "Confirm PMS integration auto-creates turnovers with correct dates and property mapping.",
+          "Create recurring tasks: weekly spa checks, monthly smoke alarms, quarterly deep cleans.",
+          "For ad-hoc maintenance, use Task hub → New Task (to pull template defaults), then link to the maintenance issue.",
+          "Use map view and route planning to assign work by roster and region."
         ],
-        best: 'Batch recurring tasks by weekday to smooth capacity; scope schedules by Group (region) and Tag (attribute).',
+        best: "Batch recurring tasks by weekday to smooth capacity; scope schedules by Group (region) and Tag (attribute).",
         extra: `
           <h3>Recurring Task Profiles by Group (PHH Standard)</h3>
           <table>
-            <thead>
-              <tr><th>Group</th><th>Weekly Cadence</th><th>Sample Tasks</th><th>Notes</th></tr>
-            </thead>
+            <thead><tr><th>Group</th><th>Weekly Cadence</th><th>Sample Tasks</th><th>Notes</th></tr></thead>
             <tbody>
               <tr><td><strong>Jervis Bay North</strong></td><td>Tue/Thu</td><td>Spa/Pool checks; Sand mitigation audit</td><td>Avoid Mon (heavy turnovers)</td></tr>
               <tr><td><strong>Jervis Bay South</strong></td><td>Wed/Fri</td><td>Outdoor corrosion check; Garden tidy</td><td>Pair with maintenance runs</td></tr>
@@ -396,190 +217,113 @@
           </ul>
           <p class="subtle">Note: Gas bottle checks continue to be managed in Process Street, not Breezeway. Do not create recurring gas tasks here.</p>
         `
-      }
-      {
-        id: 'm5',
-        title: 'Module 5 — Field App Execution (Housekeeping & Maintenance)',
-        kb: 'Field SOPs — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
-        steps: [
-          'Open assigned task; review PSRs and special notes.',
-          'Complete every checklist item; attach required photos (before/after for bathrooms, kitchens, spa).',
-          'Log defects with photos inside the task; @mention Dispatcher for urgent issues.',
-          'Confirm all steps done; allow sync to complete before leaving site.'
-        ],
-        best: 'Use voice-to-text for long notes; if signal is poor, force sync on Wi‑Fi back at base.'
       },
       {
-        id: 'm6',
-        title: 'Module 6 — Messaging & Owner/Guest Comms (Policy)',
-        kb: 'Comms & Approvals — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
+        id: "m5",
+        title: "Module 5 — Field App Execution (Housekeeping & Maintenance)",
+        kb: "Field SOPs — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
         steps: [
-          'Owners: keep comms via email unless an owner-user is provisioned in Breezeway.',
-          'Use in-task comments for internal notes; avoid placing owner emails in public threads.',
-          'Use tag "Maintenance — Owner Opt Out" where owner is default service provider; email the report to owner and then close the Breezeway task after responsibility is transferred.',
-          'For >$330 owner-responsible work: email report to owner from PHH; then close the task in Breezeway to transfer responsibility.'
+          "Open assigned task; review PSRs and special notes.",
+          "Complete every checklist item; attach required photos (before/after for bathrooms, kitchens, spa).",
+          "Log defects with photos inside the task; @mention Dispatcher for urgent issues.",
+          "Confirm all steps done; allow sync to complete before leaving site."
         ],
-        best: 'Stamp key decisions/approvals in task notes with time and staff initials.'
-      }
-      {
-        id: 'm7',
-        title: 'Module 7 — Reporting & Analytics',
-        kb: 'Reporting — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
-        steps: [
-          'Review task completion rate by Group/Tag; identify SLA breaches.',
-          'Check photo compliance % for turnovers; coach where needed.',
-          'Monitor maintenance backlog by trade and property; escalate blockers.',
-          'Export CSV for monthly board pack and archive under Ops/Breezeway/Reports/YYYY‑MM.'
-        ],
-        best: 'Tie reviews to Groups and Tags so coaching is targeted and measurable.'
+        best: "Use voice-to-text for long notes; if signal is poor, force sync on Wi‑Fi back at base."
       },
       {
-        id: 'm8',
-        title: 'Module 8 — Integrations & Admin',
-        kb: 'Integrations — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
+        id: "m6",
+        title: "Module 6 — Messaging & Owner/Guest Comms (Policy)",
+        kb: "Comms & Approvals — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
         steps: [
-          'Gather credentials (PMS API keys, channel tokens); map properties.',
-          'Connect PMS/Channels in Breezeway; verify timezones and check-in/out times.',
-          'Test with a sandbox reservation; confirm a turnover task is auto-created with the correct property and dates.',
-          'Track Support dependencies: bulk-add trades; bulk apply Spa/Pool & Pet-Friendly templates.'
+          "Owners: keep comms via email unless an owner-user is provisioned in Breezeway.",
+          "Use in-task comments for internal notes; avoid placing owner emails in public threads.",
+          "Use tag 'Maintenance — Owner Opt Out' where owner is default service provider; email the report to owner and then close the Breezeway task after responsibility is transferred.",
+          "For >$330 owner-responsible work: email report to owner from PHH; then close the task in Breezeway to transfer responsibility."
         ],
-        best: 'Maintain a Mapping Sheet (PMS ID ↔ Breezeway Property ↔ OTA ID) in the Master KB.'
+        best: "Stamp key decisions/approvals in task notes with time and staff initials."
       },
       {
-        id: 'm9',
-        title: 'Module 9 — Troubleshooting Playbooks',
-        kb: 'Troubleshooting Log — Master KB',
-        kbUrl: 'https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197',
+        id: "m7",
+        title: "Module 7 — Reporting & Analytics",
+        kb: "Reporting — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
         steps: [
-          'A) Maintenance tab task doesn\'t pull template/assignee → Create via Task hub → New Task and link back to the issue.',
-          'B) User cannot see assigned property → Check role, property permissions, group membership; re-login mobile.',
-          'C) Push notifications missing → Verify OS permissions; toggle notifications; sign out/in; test with a ping task.'
+          "Review task completion rate by Group/Tag; identify SLA breaches.",
+          "Check photo compliance % for turnovers; coach where needed.",
+          "Monitor maintenance backlog by trade and property; escalate blockers.",
+          "Export CSV for monthly board pack and archive under Ops/Breezeway/Reports/YYYY‑MM."
         ],
-        best: 'File fixes and outcomes back to the Troubleshooting Log in the Master KB to build team muscle memory.'
+        best: "Tie reviews to Groups and Tags so coaching is targeted and measurable."
+      },
+      {
+        id: "m8",
+        title: "Module 8 — Integrations & Admin",
+        kb: "Integrations — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
+        steps: [
+          "Gather credentials (PMS API keys, channel tokens); map properties.",
+          "Connect PMS/Channels in Breezeway; verify timezones and check-in/out times.",
+          "Test with a sandbox reservation; confirm a turnover task is auto-created with the correct property and dates.",
+          "Track Support dependencies: bulk-add trades; bulk apply Spa/Pool & Pet-Friendly templates."
+        ],
+        best: "Maintain a Mapping Sheet (PMS ID ↔ Breezeway Property ↔ OTA ID) in the Master KB."
+      },
+      {
+        id: "m9",
+        title: "Module 9 — Troubleshooting Playbooks",
+        kb: "Troubleshooting Log — Master KB",
+        kbUrl: "https://docs.google.com/spreadsheets/d/1lA1-sW0IvBta9KEtyzDhIKkjPZ2L-n9xT3ZDaudiWNY/edit?pli=1&gid=1169608197#gid=1169608197",
+        steps: [
+          "A) Maintenance tab task doesn't pull template/assignee → Create via Task hub → New Task and link back to the issue.",
+          "B) User cannot see assigned property → Check role, property permissions, group membership; re-login mobile.",
+          "C) Push notifications missing → Verify OS permissions; toggle notifications; sign out/in; test with a ping task."
+        ],
+        best: "File fixes and outcomes back to the Troubleshooting Log in the Master KB to build team muscle memory."
       }
     ];
 
     // =========================
-    // DOM Construction Helpers
+    // Build UI
     // =========================
-    const container = document.getElementById('modules');
-    let completed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const container = document.getElementById("modules");
+    let completed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     if (!Array.isArray(completed) || completed.length !== modules.length) {
       completed = new Array(modules.length).fill(false);
     }
 
-    function makeCard(m, index) {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.dataset.index = index;
+    function makeCard(m, index){
+      const card = document.createElement("div"); card.className = "card"; card.dataset.index = index;
+      const header = document.createElement("div"); header.className = "card-header";
+      const h2 = document.createElement("h2"); h2.textContent = m.title;
+      const pill = document.createElement("span"); pill.className = "kpill"; pill.innerHTML = `KB <span>→</span> <a href="${m.kbUrl}" target="_blank" rel="noopener">${m.kb}</a>`;
+      const checkbox = document.createElement("input"); checkbox.type = "checkbox"; checkbox.className = "complete"; checkbox.title = "Mark module complete"; checkbox.checked = !!completed[index];
+      header.appendChild(h2); header.appendChild(pill); header.appendChild(checkbox);
 
-      const header = document.createElement('div');
-      header.className = 'card-header';
+      const body = document.createElement("div"); body.className = "card-body";
+      const list = document.createElement("ol"); m.steps.forEach(s => { const li = document.createElement("li"); li.textContent = s; list.appendChild(li); }); body.appendChild(list);
+      const best = document.createElement("p"); best.className = "best-practice"; best.textContent = "✅ Best Practice: " + m.best; body.appendChild(best);
+      if (m.extra) { const extra = document.createElement("div"); extra.innerHTML = m.extra; body.appendChild(extra); }
+      const sub = document.createElement("p"); sub.className = "subtle"; sub.textContent = "Tip: Add screenshots here when available."; body.appendChild(sub);
 
-      const h2 = document.createElement('h2');
-      h2.textContent = m.title;
+      header.addEventListener("click", (e) => { if (e.target.tagName !== "INPUT" && e.target.tagName !== "A") { body.style.display = body.style.display === "block" ? "none" : "block"; }});
+      checkbox.addEventListener("change", () => { completed[index] = checkbox.checked; saveProgress(); updateProgressBar(); });
 
-      const pill = document.createElement('span');
-      pill.className = 'kpill';
-      pill.innerHTML = `KB <span>→</span> <a href="${m.kbUrl}" target="_blank" rel="noopener">${m.kb}</a>`;
-
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.className = 'complete';
-      checkbox.title = 'Mark module complete';
-      checkbox.checked = !!completed[index];
-
-      header.appendChild(h2);
-      header.appendChild(pill);
-      header.appendChild(checkbox);
-
-      const body = document.createElement('div');
-      body.className = 'card-body';
-
-      const list = document.createElement('ol');
-      m.steps.forEach((s) => {
-        const li = document.createElement('li');
-        li.textContent = s;
-        list.appendChild(li);
-      });
-      body.appendChild(list);
-
-      const best = document.createElement('p');
-      best.className = 'best-practice';
-      best.textContent = '✅ Best Practice: ' + m.best;
-      body.appendChild(best);
-
-      if (m.extra) {
-        const extra = document.createElement('div');
-        extra.innerHTML = m.extra;
-        body.appendChild(extra);
-      }
-
-      const sub = document.createElement('p');
-      sub.className = 'subtle';
-      sub.textContent = 'Tip: Add screenshots here when available.';
-      body.appendChild(sub);
-
-      // Interactions
-      header.addEventListener('click', (e) => {
-        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'A') {
-          body.style.display = body.style.display === 'block' ? 'none' : 'block';
-        }
-      });
-
-      checkbox.addEventListener('change', () => {
-        completed[index] = checkbox.checked;
-        saveProgress();
-        updateProgressBar();
-      });
-
-      card.appendChild(header);
-      card.appendChild(body);
-      return card;
+      card.appendChild(header); card.appendChild(body); return card;
     }
 
-    modules.forEach((m, i) => container.appendChild(makeCard(m, i)));
+    modules.forEach((m,i) => container.appendChild(makeCard(m,i)));
 
-    // =========================
-    // Progress Bar & Persistence
-    // =========================
-    const bar = document.getElementById('progressBar');
-
-    function updateProgressBar() {
-      const count = completed.filter(Boolean).length;
-      bar.style.width = `${(count / modules.length) * 100}%`;
-      bar.textContent = `${count} / ${modules.length} Modules Complete`;
-    }
-
-    function saveProgress() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
-    }
-
+    // Progress & controls
+    const bar = document.getElementById("progressBar");
+    function updateProgressBar(){ const count = completed.filter(Boolean).length; bar.style.width = `${(count/modules.length)*100}%`; bar.textContent = `${count} / ${modules.length} Modules Complete`; }
+    function saveProgress(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(completed)); }
     updateProgressBar();
 
-    // =========================
-    // Toolbar Controls
-    // =========================
-    document.getElementById('expandAll').addEventListener('click', () => {
-      document.querySelectorAll('.card-body').forEach((b) => (b.style.display = 'block'));
-    });
-
-    document.getElementById('collapseAll').addEventListener('click', () => {
-      document.querySelectorAll('.card-body').forEach((b) => (b.style.display = 'none'));
-    });
-
-    document.getElementById('reset').addEventListener('click', () => {
-      if (confirm('Reset progress for all modules?')) {
-        completed = new Array(modules.length).fill(false);
-        saveProgress();
-        document.querySelectorAll('.complete').forEach((c) => (c.checked = false));
-        updateProgressBar();
-      }
-    });
+    document.getElementById("expandAll").addEventListener("click", () => { document.querySelectorAll(".card-body").forEach(b => b.style.display = "block"); });
+    document.getElementById("collapseAll").addEventListener("click", () => { document.querySelectorAll(".card-body").forEach(b => b.style.display = "none"); });
+    document.getElementById("reset").addEventListener("click", () => { if (confirm("Reset progress for all modules?")) { completed = new Array(modules.length).fill(false); saveProgress(); document.querySelectorAll(".complete").forEach(c => c.checked = false); updateProgressBar(); }});
   </script>
 </body>
 </html>
