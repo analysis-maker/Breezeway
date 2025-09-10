@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PHH Trade Assignment Fill‑In Sheet — Dropdowns + CSV Export</title>
+<style>
+  :root{--brand:#0b6b6f;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--bg:#fff}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  .wrap{max-width:1100px;margin:22px auto 60px;padding:0 16px}
+  header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--brand);padding-bottom:10px;margin-bottom:14px}
+  h1{font-size:22px;margin:0;font-weight:800}
+  .sub{color:var(--muted);font-size:12px}
+  h2{font-size:16px;margin:16px 0 8px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .card{border:1px solid var(--line);border-radius:12px;padding:12px}
+  label{display:block;font-weight:700;font-size:12px;margin-bottom:4px}
+  textarea,input,select{width:100%;padding:8px;border:1px solid var(--line);border-radius:10px;font-size:14px}
+  .row{display:grid;grid-template-columns:2fr 1fr;gap:8px}
+  .btn{appearance:none;border:1px solid var(--brand);color:var(--brand);background:#eef7f8;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn.secondary{border-color:#cbd5e1;color:#334155;background:#f8fafc}
+  table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:#f8fafc;text-align:left;font-size:12px}
+  tbody tr:nth-child(even){background:#fbfbfd}
+  .controls{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{display:inline-block;background:#eef7f8;color:var(--brand);border:1px solid #c8e6e8;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:700}
+  .hint{color:var(--muted);font-size:12px}
+  .w-120{width:120px}
+  .w-200{width:200px}
+  .nowrap{white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>PHH Trade Assignment Fill‑In Sheet (Angus)</h1>
+      <div class="sub">Primary + Backup per property • Dropdowns filtered by region • Export to CSV tabs • Updated <span id="today"></span></div>
+    </div>
+    <div class="controls">
+      <button class="btn" id="exportAll">Download Combined CSV</button>
+      <button class="btn" id="exportElec">Download Electricians CSV</button>
+      <button class="btn" id="exportPlumb">Download Plumbers CSV</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h2>1) Regions</h2>
+      <label for="regions">One per line</label>
+      <textarea id="regions" rows="4">Berry
+South
+North
+West</textarea>
+      <div class="controls" style="margin-top:8px">
+        <button class="btn" id="applyRegions">Apply Regions</button>
+        <span class="hint">Used for property rows and vendor filtering.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2) Properties (bulk paste)</h2>
+      <label for="props">Format: <span class="pill">Property Name | Region</span> (one per line)</label>
+      <textarea id="props" rows="6">Hayes Beach House | South
+Seaside Cottage | Berry
+Forest View | Berry
+Riverbend Retreat | South</textarea>
+      <div class="controls" style="margin-top:8px">
+        <button class="btn" id="addRows">Add Rows</button>
+        <button class="btn secondary" id="clearRows">Clear Rows</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:14px">
+    <div class="card">
+      <h2>3) Electricians list</h2>
+      <label for="elecs">Format: <span class="pill">Name | Region(s, comma‑separated) | WillTravel(Y/N)</span></label>
+      <textarea id="elecs" rows="6">Cory — The Berry Electrician | Berry | Y
+South Spark Co | South | Y
+North Lite | North | N
+All‑Area Electrics | Berry, South, North, West | Y</textarea>
+      <div class="controls" style="margin-top:8px">
+        <button class="btn" id="applyElecs">Apply Electricians</button>
+        <span class="hint">Dropdowns will show region‑matched + anyone who will travel.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4) Plumbers list</h2>
+      <label for="plumbs">Format: <span class="pill">Name | Region(s, comma‑separated) | WillTravel(Y/N)</span></label>
+      <textarea id="plumbs" rows="6">Berry Flow | Berry | Y
+South Pipes | South | Y
+North Drain Pros | North | N
+All‑Area Plumbing | Berry, South, North, West | Y</textarea>
+      <div class="controls" style="margin-top:8px">
+        <button class="btn" id="applyPlumbs">Apply Plumbers</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>5) Assignment table (choose Primary + Backup)</h2>
+    <div class="controls" style="margin-bottom:8px">
+      <button class="btn" id="autoFill">Auto‑fill by region</button>
+      <button class="btn secondary" id="clearSelects">Clear selections</button>
+      <span class="hint">Auto‑fill picks the first 2 matching vendors for each trade.</span>
+    </div>
+    <div style="overflow:auto">
+      <table id="assignTbl">
+        <thead>
+          <tr>
+            <th style="min-width:220px">Property_Name</th>
+            <th class="nowrap">Region</th>
+            <th>Electrician_Primary</th>
+            <th>Electrician_Backup</th>
+            <th>Plumber_Primary</th>
+            <th>Plumber_Backup</th>
+            <th style="min-width:200px">Notes</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<script>
+(function(){
+  const $=s=>document.querySelector(s);
+  const $$=s=>Array.from(document.querySelectorAll(s));
+  const today=new Date();$('#today').textContent=new Intl.DateTimeFormat(undefined,{year:'numeric',month:'long',day:'numeric'}).format(today);
+
+  let regions=['Berry','South','North','West'];
+  let elecs=[]; let plumbs=[]; let rows=[];
+
+  function parseVendors(text){
+    return text.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{
+      const parts=l.split('|').map(x=>x.trim());
+      let name=parts[0]||''; let regs=(parts[1]||'').split(',').map(x=>x.trim()).filter(Boolean);
+      let travel=((parts[2]||'N').toUpperCase().startsWith('Y'));
+      return {name,regions:regs,travel};
+    }).filter(v=>v.name);
+  }
+  function parseProps(text){
+    return text.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{
+      const parts=l.split('|').map(x=>x.trim());
+      return {property:parts[0]||'', region:parts[1]||regions[0], ep:'', eb:'', pp:'', pb:'', notes:''};
+    }).filter(r=>r.property);
+  }
+  function optionsFor(vendors,region){
+    const list=vendors.filter(v=>v.regions.includes(region)||v.travel);
+    return list.map(v=>v.name);
+  }
+  function makeSel(opts,value){
+    const sel=document.createElement('select'); sel.innerHTML='<option value="">— Select —</option>' + opts.map(o=>`<option>${o}</option>`).join('');
+    sel.value=value||''; return sel;
+  }
+  function makeRegionSel(value){
+    const sel=document.createElement('select'); sel.innerHTML=regions.map(r=>`<option>${r}</option>`).join(''); sel.value=value; return sel;
+  }
+  function render(){
+    const tb=$('#assignTbl tbody'); tb.innerHTML='';
+    rows.forEach((r,i)=>{
+      const tr=document.createElement('tr');
+      const tdName=document.createElement('td'); tdName.textContent=r.property; tr.appendChild(tdName);
+      const tdReg=document.createElement('td'); let regSel=makeRegionSel(r.region); regSel.addEventListener('change',()=>{r.region=regSel.value; // reset selections when region changes
+        const eOpts=optionsFor(elecs,r.region); const pOpts=optionsFor(plumbs,r.region);
+        ePri.replaceWith(ePri=makeSel(eOpts,'')); eBak.replaceWith(eBak=makeSel(eOpts,''));
+        pPri.replaceWith(pPri=makeSel(pOpts,'')); pBak.replaceWith(pBak=makeSel(pOpts,''));
+        attachSelHandlers();
+      }); tdReg.appendChild(regSel); tr.appendChild(tdReg);
+
+      const eOpts=optionsFor(elecs,r.region); const pOpts=optionsFor(plumbs,r.region);
+      let ePri=makeSel(eOpts,r.ep); let eBak=makeSel(eOpts,r.eb); let pPri=makeSel(pOpts,r.pp); let pBak=makeSel(pOpts,r.pb);
+      function attachSelHandlers(){
+        ePri.addEventListener('change',()=>{r.ep=ePri.value});
+        eBak.addEventListener('change',()=>{r.eb=eBak.value});
+        pPri.addEventListener('change',()=>{r.pp=pPri.value});
+        pBak.addEventListener('change',()=>{r.pb=pBak.value});
+      }
+      attachSelHandlers();
+      const tdEP=document.createElement('td'); tdEP.appendChild(ePri); tr.appendChild(tdEP);
+      const tdEB=document.createElement('td'); tdEB.appendChild(eBak); tr.appendChild(tdEB);
+      const tdPP=document.createElement('td'); tdPP.appendChild(pPri); tr.appendChild(tdPP);
+      const tdPB=document.createElement('td'); tdPB.appendChild(pBak); tr.appendChild(tdPB);
+
+      const tdNotes=document.createElement('td'); const n=document.createElement('input'); n.value=r.notes; n.addEventListener('input',()=>{r.notes=n.value}); tdNotes.appendChild(n); tr.appendChild(tdNotes);
+      tb.appendChild(tr);
+    });
+  }
+
+  function exportCSV(which){
+    const esc=s=>`"${String(s||'').replace(/"/g,'""')}"`;
+    let header=['Property_Name','Region'];
+    if(which==='all' || which==='elec'){ header.push('Electrician_Primary','Electrician_Backup'); }
+    if(which==='all' || which==='plumb'){ header.push('Plumber_Primary','Plumber_Backup'); }
+    header.push('Notes');
+    const lines=[header.join(',')];
+    rows.forEach(r=>{
+      const cols=[r.property,r.region];
+      if(which==='all' || which==='elec'){ cols.push(r.ep,r.eb); }
+      if(which==='all' || which==='plumb'){ cols.push(r.pp,r.pb); }
+      cols.push(r.notes);
+      lines.push(cols.map(esc).join(','));
+    });
+    const blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+    const a=document.createElement('a');
+    const fname = which==='elec' ? 'PHH_Electricians.csv' : which==='plumb' ? 'PHH_Plumbers.csv' : 'PHH_Trade_Assignments.csv';
+    a.href=URL.createObjectURL(blob); a.download=fname; a.click(); URL.revokeObjectURL(a.href);
+  }
+
+  function autoFill(){
+    rows.forEach(r=>{
+      const e=optionsFor(elecs,r.region); r.ep=e[0]||''; r.eb=e[1]||'';
+      const p=optionsFor(plumbs,r.region); r.pp=p[0]||''; r.pb=p[1]||'';
+    });
+    render();
+  }
+
+  // Hook up controls
+  $('#applyRegions').addEventListener('click',()=>{ regions=$('#regions').value.split(/\n+/).map(s=>s.trim()).filter(Boolean); render(); });
+  $('#applyElecs').addEventListener('click',()=>{ elecs=parseVendors($('#elecs').value); render(); });
+  $('#applyPlumbs').addEventListener('click',()=>{ plumbs=parseVendors($('#plumbs').value); render(); });
+  $('#addRows').addEventListener('click',()=>{ rows = rows.concat(parseProps($('#props').value)); render(); });
+  $('#clearRows').addEventListener('click',()=>{ rows=[]; render(); });
+  $('#autoFill').addEventListener('click',autoFill);
+  $('#clearSelects').addEventListener('click',()=>{ rows.forEach(r=>{r.ep=r.eb=r.pp=r.pb=''}); render(); });
+  $('#exportAll').addEventListener('click',()=>exportCSV('all'));
+  $('#exportElec').addEventListener('click',()=>exportCSV('elec'));
+  $('#exportPlumb').addEventListener('click',()=>exportCSV('plumb'));
+
+  // init vendors/rows from defaults
+  elecs=parseVendors($('#elecs').value); plumbs=parseVendors($('#plumbs').value); rows=parseProps($('#props').value); render();
+})();
+</script>
+</body>
+</html>
