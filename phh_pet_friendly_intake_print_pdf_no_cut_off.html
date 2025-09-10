@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PHH Pet‑Friendly Intake — Print PDF</title>
+  <style>
+    :root{
+      --brand:#0b6b6f;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#fff
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .page{max-width:1000px;margin:24px auto 48px;padding:0 16px}
+    header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--brand);padding-bottom:10px;margin-bottom:12px}
+    .title{font-weight:800;font-size:22px}
+    .sub{color:var(--muted);font-size:12px}
+    .btn{all:unset;border:1px solid var(--brand);color:var(--brand);padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer}
+    .btn:hover{background:#eef7f8}
+    h2{font-size:18px;margin:14px 0 6px}
+    .tip{color:var(--muted);font-size:12px;margin:4px 0 10px}
+    table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;table-layout:fixed}
+    th,td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top}
+    thead th{background:#f8fafc;text-align:left;font-size:12px}
+    tbody tr:nth-child(even){background:#fbfbfd}
+    /* Make very long words and CSV wrap nicely */
+    td,th{word-break:break-word;overflow-wrap:anywhere}
+    pre,code{white-space:pre-wrap;word-break:break-word}
+
+    /* Print rules */
+    @media print{
+      .btn{display:none}
+      .page{margin:0;padding:0}
+      @page{size:A4 landscape;margin:12mm}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <div class="title">PHH Pet‑Friendly Intake — Print‑Safe (No Cut‑off)</div>
+        <div class="sub">Split into narrow tables, fixed layout, word‑wrapping enabled • Updated <span id="today"></span></div>
+      </div>
+      <button class="btn" onclick="window.print()">Download PDF</button>
+    </header>
+
+    <h2>Part A — IDs, flags, timing</h2>
+    <div class="tip">Use for property identifiers, flags, and time/pay uplifts.</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Property_Name</th>
+          <th>HomHero_Property_ID</th>
+          <th>Breezeway_Property_ID</th>
+          <th>Pet_Friendly</th>
+          <th>Pet_Max_Count</th>
+          <th>Pet_Fee_Code_or_Amount</th>
+          <th>Time_Uplift_Min</th>
+          <th>Pay_Uplift</th>
+          <th>Tasks_Modifier_Name</th>
+          <th>Photo_Required_Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Example Cottage</td>
+          <td>HH‑1023</td>
+          <td>BW‑P‑4331</td>
+          <td>Y</td>
+          <td>2</td>
+          <td>PETFEE_AU$80</td>
+          <td>30</td>
+          <td>+15%</td>
+          <td>Pet Clean Add‑On</td>
+          <td>6</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Part B1 — tasks & supplies</h2>
+    <div class="tip">Checklist bundle and treatment details.</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Checklist_Additions</th>
+          <th>Deodorizer_Type</th>
+          <th>UV_Check</th>
+          <th>Carpet_Spot_Treat</th>
+          <th>Upholstery_HEPA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Hair removal; Enzymatic spot; Yard waste</td>
+          <td>Bio‑Enzyme spray (10 min)</td>
+          <td>Y</td>
+          <td>Y</td>
+          <td>Y</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Part B2 — filters, exterior, messaging</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Filter_Type</th>
+          <th>Filter_Change_After_Pet</th>
+          <th>Pest_Control_Action</th>
+          <th>Yard_Waste_Removal</th>
+          <th>Fence_Gate_Check</th>
+          <th>Amenity_Set</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>MERV‑11</td>
+          <td>Change after each pet stay</td>
+          <td>Flea treatment if accident detected</td>
+          <td>Y</td>
+          <td>Y</td>
+          <td>2 bowls; throw; waste bags</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Part C — comms, routing, approvals</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Msg_Template_PreArrival</th>
+          <th>Msg_Template_PostDeparture</th>
+          <th>Incident_Route_To</th>
+          <th>Owner_Approval_Threshold</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PET_RULES_V1</td>
+          <td>PET_POST_V1</td>
+          <td>Supervisor – Maintenance</td>
+          <td>AU$330</td>
+          <td>Ozone if odor persists &gt; 24h</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>CSV header (copy/paste)</h2>
+    <div class="tip">Wrapped for printing; still copies cleanly.</div>
+    <pre><code>Property_Name,HomHero_Property_ID,Breezeway_Property_ID,Pet_Friendly,Pet_Max_Count,Pet_Fee_Code_or_Amount,Time_Uplift_Min,Pay_Uplift,Tasks_Modifier_Name,Photo_Required_Count,Checklist_Additions,Deodorizer_Type,UV_Check,Carpet_Spot_Treat,Upholstery_HEPA,Filter_Type,Filter_Change_After_Pet,Pest_Control_Action,Yard_Waste_Removal,Fence_Gate_Check,Amenity_Set,Msg_Template_PreArrival,Msg_Template_PostDeparture,Incident_Route_To,Owner_Approval_Threshold,Notes
+Example Cottage,HH-1023,BW-P-4331,Y,2,PETFEE_AU$80,30,+15%,Pet Clean Add-On,6,"Hair removal; Enzymatic spot; Yard waste","Bio-Enzyme spray (10 min)",Y,Y,Y,MERV-11,Change after each pet stay,Flea treatment if accident detected,Y,Y,"2 bowls; throw; waste bags",PET_RULES_V1,PET_POST_V1,Supervisor – Maintenance,AU$330,Ozone if odor persists &gt; 24h</code></pre>
+
+  </div>
+  <script>
+    const z=new Date();document.getElementById('today').textContent=new Intl.DateTimeFormat(undefined,{year:'numeric',month:'long',day:'numeric'}).format(z);
+  </script>
+</body>
+</html>
