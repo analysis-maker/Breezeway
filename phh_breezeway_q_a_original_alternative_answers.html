@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PHH – Breezeway Q&amp;A (Original + Alternative Answers)</title>
+  <style>
+    :root{
+      --brand:#0b6b6f;/* PHH teal-esque */
+      --ink:#1f2937;/* slate-800 */
+      --muted:#6b7280;/* gray-500 */
+      --bg:#ffffff;
+      --line:#e5e7eb;/* gray-200 */
+      --row:#f9fafb;/* gray-50 */
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"}
+    .page{max-width:1080px;margin:32px auto 64px;padding:0 24px}
+    header{display:flex;justify-content:space-between;align-items:flex-end;margin:8px 0 16px 0;border-bottom:3px solid var(--brand);padding-bottom:12px}
+    .title{font-size:24px;font-weight:800;letter-spacing:0.2px}
+    .subtitle{color:var(--muted);font-size:14px;margin-top:6px}
+    .badge{background:var(--brand);color:#fff;border-radius:999px;padding:6px 12px;font-weight:600;font-size:13px}
+    .actions{display:flex;gap:8px}
+    .btn{all:unset;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--brand);color:var(--brand);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
+    .btn:hover{background:rgba(11,107,111,0.06)}
+    .legend{display:flex;align-items:center;gap:12px;margin:16px 0 6px 0;color:var(--muted);font-size:13px}
+    table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+    thead th{background:var(--row);text-align:left;font-size:13px;color:#111827;padding:12px 12px;border-bottom:1px solid var(--line)}
+    tbody td{vertical-align:top;padding:12px;border-bottom:1px solid var(--line)}
+    tbody tr:nth-child(even){background:#fcfcfd}
+    .col-q{width:8%;min-width:68px;font-weight:700}
+    .col-question{width:24%}
+    .col-original{width:34%}
+    .col-alt{width:34%}
+    .small{font-size:12px;color:var(--muted)}
+    .pill{display:inline-block;background:#eef7f8;color:#0b6b6f;border:1px solid #c8e6e8;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:600}
+    footer{margin-top:18px;color:var(--muted);font-size:12px}
+
+    /* Print styling */
+    @media print{
+      .actions,.legend{display:none}
+      .page{margin:0;max-width:100%;padding:0}
+      header{margin:0 0 8px 0}
+      thead{display:table-header-group}
+      tfoot{display:table-footer-group}
+      tr{page-break-inside:avoid}
+      @page{size:A4;margin:16mm}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <div class="title">Professional Holiday Homes — Breezeway Q&amp;A</div>
+        <div class="subtitle">Original answers from meeting + PHH-aligned alternatives • Updated <span id="today"></span></div>
+      </div>
+      <div class="actions no-print">
+        <button class="btn" onclick="window.print()" title="Save/Print as PDF">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+          Download PDF
+        </button>
+      </div>
+    </header>
+
+    <div class="legend">
+      <span class="pill">Format</span>
+      <span>Q# • Original question • Staff-friendly answer • PHH-aligned alternative</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th class="col-q">Q#</th>
+          <th class="col-question">Original question</th>
+          <th class="col-original">Staff-friendly answer (from your doc)</th>
+          <th class="col-alt">Alternative answer (PHH‑aligned)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-q">Q5</td>
+          <td class="col-question">Can the system send text messages or link to Slack channels?</td>
+          <td class="col-original">Breezeway supports in‑app, email, and SMS for staff. Guest messaging is a paid add‑on. Slack linking not supported; use an email‑to‑Slack bridge.</td>
+          <td class="col-alt">Keep Breezeway as the single comms hub: use staff push/email/SMS for ops, and if Slack visibility is needed, forward a designated ops inbox into Slack so nothing is double‑managed. Standardize who gets what (e.g., cleaners = push; supervisors = push+email) in a brief Comms SOP.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q8</td>
+          <td class="col-question">How are housekeepers notified of new cleans? App / Email / SMS?</td>
+          <td class="col-original">Housekeepers choose push/email/SMS. Save the mobile number to enable SMS; staff SMS is included.</td>
+          <td class="col-alt">Beyond preferences, ensure tasks are <strong>Committed</strong> (not Draft) and the cleaner is the <strong>assigned/default worker</strong> so notifications fire. Use SMS for same‑day turns; default to push to reduce inbox noise.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q10</td>
+          <td class="col-question">Do current maintenance tasks auto‑import or bulk import?</td>
+          <td class="col-original">No auto‑import or bulk import; add new tasks manually.</td>
+          <td class="col-alt">Stand up recurring <strong>maintenance workflows</strong> (by asset/property) so the next 60 days of work schedules itself from rules. Manually backfill only truly “in‑progress” legacy items to reach automation faster.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q12</td>
+          <td class="col-question">Is there a way to auto‑import photos?</td>
+          <td class="col-original">No. Staff must capture verification photos in the Breezeway mobile app.</td>
+          <td class="col-alt">Keep verification live, but add <strong>Reference Photos</strong> to the template (e.g., link to a property album) so reps can see standards, then require new photos on completion via “Photo required” checklist items.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q16</td>
+          <td class="col-question">Add specific tasks to a departure clean based on property tag?</td>
+          <td class="col-original">Not by tag. Use Template Modifiers or dedicated templates (e.g., Spa, Pet‑Friendly).</td>
+          <td class="col-alt">Mirror “tags” using <strong>property groups</strong> and attach a small automation that adds an “add‑on” task when a checkout occurs at any property in that group. Keeps templates simpler while preserving automation.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q19</td>
+          <td class="col-question">Can we change Department Names?</td>
+          <td class="col-original">Not currently. On the roadmap; timing not guaranteed.</td>
+          <td class="col-alt">Simulate departments with <strong>Task Types + Saved Views</strong> (e.g., “Grounds – Lawn,” “Grounds – Pool”) and adopt a naming convention in task titles: <em>Property – TaskType – Date</em> for clear filters and exports.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q22</td>
+          <td class="col-question">Can we change colours in the property schedule?</td>
+          <td class="col-original">No colour customisation; log an enhancement request.</td>
+          <td class="col-alt">Reduce colour dependency: save filtered <strong>Schedule</strong> views (by department/assignee) and rely on <strong>Property Readiness</strong> (green check) to confirm guest‑ready status at a glance.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q25</td>
+          <td class="col-question">Best way to schedule lawn mowing (every 2 weeks Oct–Apr; every 4 weeks May–Sept)?</td>
+          <td class="col-original">Two seasonal workflows or date‑bounded recurrence.</td>
+          <td class="col-alt">Use two rules with fixed weekdays (e.g., every 2nd Monday vs every 4th Monday) bounded by season dates. Add a “Skip if heavy rain” checklist note and move the single occurrence forward one day when needed to keep history intact.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q27</td>
+          <td class="col-question">HomHero auto‑emails housekeepers—how will this work with Breezeway?</td>
+          <td class="col-original">Pick one source of truth; many disable HomHero emails and rely on Breezeway notifications. Document your approach.</td>
+          <td class="col-alt"><strong>Segmented approach:</strong> keep HomHero emails <em>on</em> for external vendors, and rely on Breezeway push/SMS for internal staff. Add a one‑page vendor onboarding sheet (“Which app tells you what”) to avoid mixed instructions.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q28</td>
+          <td class="col-question">How do housekeepers report maintenance &amp; where do we view it?</td>
+          <td class="col-original">Reps tap <em>Add Issue</em> in the mobile app; managers are notified per settings; issues appear in the Maintenance tab.</td>
+          <td class="col-alt">Bake it into the <strong>cleaning template</strong>: add a required item “Any issues to report?” If “Yes,” a dependent automation creates a Maintenance task and pings a Supervisor for triage—so issues are captured even if someone forgets <em>Add Issue</em>.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q30</td>
+          <td class="col-question">Auto‑allocate jobs &gt; $330 to owner? Where do we input the $$?</td>
+          <td class="col-original">Not supported. Workaround: assign owner as Representative and assign the task to them.</td>
+          <td class="col-alt">Use a lightweight <strong>approval workflow</strong>: add a checklist question “Estimate &gt; $330?” (required). If “Yes,” auto‑create an <em>Owner Approval</em> task (or notify the owner) and tag the original job “Awaiting Owner Approval.” Proceed once approved.</td>
+        </tr>
+        <tr>
+          <td class="col-q">Q21</td>
+          <td class="col-question">Can we modify or hide guest ratings?</td>
+          <td class="col-original">No. Guest ratings feed property scores; cleaner departure ratings are internal‑only (task reports).</td>
+          <td class="col-alt">Don’t collect public ratings by default: disable any rating request messages in guest campaigns, and gather private CSAT via a short internal survey or owner‑safe follow‑up. Preserves scoring while controlling how/when feedback is requested.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <footer>
+      Prepared for Professional Holiday Homes • For internal use.
+    </footer>
+  </div>
+
+  <script>
+    // Stamp today’s date in a friendly format
+    const z = new Date();
+    const fmt = new Intl.DateTimeFormat(undefined,{year:'numeric',month:'long',day:'numeric'}).format(z);
+    document.getElementById('today').textContent = fmt;
+  </script>
+</body>
+</html>
