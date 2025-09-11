@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PHH Trade Assignment Fill‑In Sheet — Dropdowns + CSV Export</title>
+<title>PHH Trade Assignment Fill‑In Sheet — Dropdowns + CSV/Text Import/Export</title>
 <style>
   :root{--brand:#0b6b6f;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--bg:#fff}
   *{box-sizing:border-box}
@@ -21,6 +21,7 @@
   .btn{appearance:none;border:1px solid var(--brand);color:var(--brand);background:#eef7f8;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
   .btn:disabled{opacity:.5;cursor:not-allowed}
   .btn.secondary{border-color:#cbd5e1;color:#334155;background:#f8fafc}
+  .btn.ghost{border-color:#e5e7eb;color:#111827;background:#fff}
   table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
   th,td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
   thead th{background:#f8fafc;text-align:left;font-size:12px}
@@ -28,9 +29,11 @@
   .controls{display:flex;gap:8px;flex-wrap:wrap}
   .pill{display:inline-block;background:#eef7f8;color:var(--brand);border:1px solid #c8e6e8;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:700}
   .hint{color:var(--muted);font-size:12px}
-  .w-120{width:120px}
-  .w-200{width:200px}
   .nowrap{white-space:nowrap}
+  .zone{border:1px dashed #cbd5e1;border-radius:12px;padding:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .zone input{width:auto}
+  .ok{color:#065f46}
+  .warn{color:#92400e}
 </style>
 </head>
 <body>
@@ -38,7 +41,7 @@
   <header>
     <div>
       <h1>PHH Trade Assignment Fill‑In Sheet (Angus)</h1>
-      <div class="sub">Primary + Backup per property • Dropdowns filtered by region • Export to CSV tabs • Updated <span id="today"></span></div>
+      <div class="sub">Primary + Backup per property • Region‑filtered dropdowns • **CSV <em>or</em> Paste‑in import** • Updated <span id="today"></span></div>
     </div>
     <div class="controls">
       <button class="btn" id="exportAll">Download Combined CSV</button>
@@ -62,43 +65,63 @@ West</textarea>
     </div>
 
     <div class="card">
-      <h2>2) Properties (bulk paste)</h2>
-      <label for="props">Format: <span class="pill">Property Name | Region</span> (one per line)</label>
-      <textarea id="props" rows="6">Hayes Beach House | South
-Seaside Cottage | Berry
-Forest View | Berry
-Riverbend Retreat | South</textarea>
+      <h2>2) Properties — paste **or** import CSV</h2>
+      <label for="props">Paste format: <span class="pill">Property Name | Region</span> (one per line)</label>
+      <textarea id="props" rows="6" placeholder="Example: Hayes Beach House | South"></textarea>
       <div class="controls" style="margin-top:8px">
         <button class="btn" id="addRows">Add Rows</button>
         <button class="btn secondary" id="clearRows">Clear Rows</button>
       </div>
+      <div class="zone" style="margin-top:8px">
+        <input type="file" id="propCsv" accept=".csv,text/csv"/>
+        <button class="btn ghost" id="importProps">Import Properties CSV</button>
+        <span class="hint">Auto‑detects columns like <em>Property_Name</em> and <em>Region/Area/Suburb</em>.</span>
+      </div>
+      <details style="margin-top:8px"><summary class="hint">Or paste raw CSV here</summary>
+        <textarea id="propCsvText" rows="5" placeholder="Property_Name,Region
+Hayes Beach House,South"></textarea>
+        <div class="controls" style="margin-top:6px"><button class="btn ghost" id="importPropText">Use pasted CSV</button></div>
+      </details>
     </div>
   </div>
 
   <div class="grid" style="margin-top:14px">
     <div class="card">
-      <h2>3) Electricians list</h2>
-      <label for="elecs">Format: <span class="pill">Name | Region(s, comma‑separated) | WillTravel(Y/N)</span></label>
-      <textarea id="elecs" rows="6">Cory — The Berry Electrician | Berry | Y
-South Spark Co | South | Y
-North Lite | North | N
-All‑Area Electrics | Berry, South, North, West | Y</textarea>
+      <h2>3) Electricians — paste **or** import CSV</h2>
+      <label for="elecs">Paste: <span class="pill">Name | Region(s, comma‑separated) | WillTravel(Y/N)</span></label>
+      <textarea id="elecs" rows="6" placeholder="Cory — The Berry Electrician | Berry | Y"></textarea>
       <div class="controls" style="margin-top:8px">
         <button class="btn" id="applyElecs">Apply Electricians</button>
-        <span class="hint">Dropdowns will show region‑matched + anyone who will travel.</span>
+        <span class="hint">Dropdowns show region‑matched + anyone who will travel.</span>
       </div>
+      <div class="zone" style="margin-top:8px">
+        <input type="file" id="elecCsv" accept=".csv,text/csv"/>
+        <button class="btn ghost" id="importElec">Import Electricians CSV</button>
+        <span class="hint">Detects headers like <em>Name/Company</em>, <em>Region(s)</em>, <em>WillTravel</em>.</span>
+      </div>
+      <details style="margin-top:8px"><summary class="hint">Or paste raw CSV here</summary>
+        <textarea id="elecCsvText" rows="5" placeholder="Name,Regions,WillTravel
+Cory — The Berry Electrician,Berry,Y"></textarea>
+        <div class="controls" style="margin-top:6px"><button class="btn ghost" id="importElecText">Use pasted CSV</button></div>
+      </details>
     </div>
 
     <div class="card">
-      <h2>4) Plumbers list</h2>
-      <label for="plumbs">Format: <span class="pill">Name | Region(s, comma‑separated) | WillTravel(Y/N)</span></label>
-      <textarea id="plumbs" rows="6">Berry Flow | Berry | Y
-South Pipes | South | Y
-North Drain Pros | North | N
-All‑Area Plumbing | Berry, South, North, West | Y</textarea>
+      <h2>4) Plumbers — paste **or** import CSV</h2>
+      <label for="plumbs">Paste: <span class="pill">Name | Region(s, comma‑separated) | WillTravel(Y/N)</span></label>
+      <textarea id="plumbs" rows="6" placeholder="Berry Flow | Berry | Y"></textarea>
       <div class="controls" style="margin-top:8px">
         <button class="btn" id="applyPlumbs">Apply Plumbers</button>
       </div>
+      <div class="zone" style="margin-top:8px">
+        <input type="file" id="plumbCsv" accept=".csv,text/csv"/>
+        <button class="btn ghost" id="importPlumb">Import Plumbers CSV</button>
+      </div>
+      <details style="margin-top:8px"><summary class="hint">Or paste raw CSV here</summary>
+        <textarea id="plumbCsvText" rows="5" placeholder="Name,Regions,WillTravel
+Berry Flow,Berry,Y"></textarea>
+        <div class="controls" style="margin-top:6px"><button class="btn ghost" id="importPlumbText">Use pasted CSV</button></div>
+      </details>
     </div>
   </div>
 
@@ -107,8 +130,9 @@ All‑Area Plumbing | Berry, South, North, West | Y</textarea>
     <div class="controls" style="margin-bottom:8px">
       <button class="btn" id="autoFill">Auto‑fill by region</button>
       <button class="btn secondary" id="clearSelects">Clear selections</button>
-      <span class="hint">Auto‑fill picks the first 2 matching vendors for each trade.</span>
+      <span class="hint">Auto‑fill picks the first 2 matching vendors per trade.</span>
     </div>
+    <div id="msg" class="hint"></div>
     <div style="overflow:auto">
       <table id="assignTbl">
         <thead>
@@ -132,38 +156,144 @@ All‑Area Plumbing | Berry, South, North, West | Y</textarea>
 (function(){
   const $=s=>document.querySelector(s);
   const $$=s=>Array.from(document.querySelectorAll(s));
-  const today=new Date();$('#today').textContent=new Intl.DateTimeFormat(undefined,{year:'numeric',month:'long',day:'numeric'}).format(today);
+  const today=new Date();
+  const fmt=new Intl.DateTimeFormat(undefined,{year:'numeric',month:'long',day:'numeric'}).format(today);
+  document.title+=' — '+fmt; $$('#today').forEach(el=>el.textContent=fmt);
 
   let regions=['Berry','South','North','West'];
   let elecs=[]; let plumbs=[]; let rows=[];
 
-  function parseVendors(text){
-    return text.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{
-      const parts=l.split('|').map(x=>x.trim());
-      let name=parts[0]||''; let regs=(parts[1]||'').split(',').map(x=>x.trim()).filter(Boolean);
-      let travel=((parts[2]||'N').toUpperCase().startsWith('Y'));
-      return {name,regions:regs,travel};
-    }).filter(v=>v.name);
+  function setMsg(text,cls=''){
+    const el=$('#msg'); if(!el) return; el.textContent=text; el.className='hint '+cls;
   }
-  function parseProps(text){
-    return text.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{
-      const parts=l.split('|').map(x=>x.trim());
-      return {property:parts[0]||'', region:parts[1]||regions[0], ep:'', eb:'', pp:'', pb:'', notes:''};
-    }).filter(r=>r.property);
+
+  function dedupeBy(arr,key){
+    const seen=new Set();
+    return arr.filter(o=>{const k=(o[key]||'').toLowerCase().trim(); if(!k||seen.has(k))return false; seen.add(k); return true;});
   }
+
+  // --- CSV parsing helpers ---
+  function escapeRegExp(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+  function detectDelim(line){
+    const c={',':(line.match(/,/g)||[]).length,';':(line.match(/;/g)||[]).length,'\t':(line.match(/\t/g)||[]).length,'|':(line.match(/\|/g)||[]).length};
+    // prefer comma if tie to match common CSV
+    const sorted=Object.entries(c).sort((a,b)=>b[1]-a[1]|| (a[0]===','?-1:1));
+    const best=sorted[0][0];
+    return best==='\\t'?'\t':best; // return real tab char
+  }
+  function parseCSV(text){
+    // normalize CRLF/CR to \n
+    const normalized = String(text||'').replace(/\r\n?/g,'\n');
+    const lines = normalized.split('\n').filter(l=>l.trim().length>0);
+    if(!lines.length) return [];
+    const delim=detectDelim(lines[0]);
+    const d = escapeRegExp(delim);
+    const token = new RegExp('(?:^|'+d+')("(?:(?:"")|[^"])*"|[^'+d+']*)','g');
+    const outRows=[];
+    for(const line of lines){
+      const row=[]; line.replace(token, m=>{
+        let s=m.replace(new RegExp('^'+d),'');
+        if(s.startsWith('"')&&s.endsWith('"')) s=s.slice(1,-1).replace(/""/g,'"');
+        row.push(s); return m;
+      });
+      outRows.push(row);
+    }
+    return outRows;
+  }
+  function readFile(file){
+    return new Promise((res,rej)=>{const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsText(file);});
+  }
+  function findHeaderIndex(headers, patterns){
+    const idx = headers.findIndex(h=>patterns.some(p=>new RegExp(p,'i').test(h)));
+    return idx>=0?idx:null;
+  }
+  function normalizeRegions(val){
+    return String(val||'').split(/[,;/\|]/).map(s=>s.trim()).filter(Boolean);
+  }
+
+  // Canonical name normalizer (merge common variants)
+  function canonicalName(name){
+    let n = String(name||'').replace(/\\s+/g,' ').trim();
+    // Absolute Plumbing Service -> Absolute Plumbing Services (singular to plural)
+    if(/^absolute plumbing service$/i.test(n)) n = 'Absolute Plumbing Services';
+    return n;
+  }
+
+  // --- UI builders ---
   function optionsFor(vendors,region){
-    const list=vendors.filter(v=>v.regions.includes(region)||v.travel);
-    return list.map(v=>v.name);
+    const priority = {
+      'Berry': {
+        // Plumbers (Berry-first)
+        'Absolute Plumbing Services':1,
+        'Shoalhaven Plumbing':2,
+        'Nowra Emergency Plumbing':3,
+        'Jervis Bay Plumbing':4,
+        'Michael Sinclair - Plumber Drainer Gasfitter':5,
+        'Steve Watson Plumbing':6,
+        'TY WATSON PLUMBING':7,
+        'Morris Plumbing':8,
+        'Culburra Plumbing Services - Chris Quinan':9,
+        'O’Brien Plumbing Batemans Bay':10,
+        'Brian Gould - BW + SJ Gould Plumbing':11,
+        'Shoal Plumbing':12,
+        // Electricians (lower priority numbers win; keep plumbers ahead in Berry)
+        'Cory Jeacocke Electrical':20,
+        'The Berry Sparky':21,
+        'Allman Electrical Services':22,
+        'Hortle Electric':23,
+        'Adam Hamshere Electrical Contractor':24,
+        'In-Line Electrical Pty Ltd':25,
+        'Skellec Electrical':26,
+        'Scott McCartney - Helping Hand Electrical & Handyman repairs':27,
+        'Jervis Bay Electrical':28
+      },
+      'South': {
+        // Plumbers (South-first)
+        'Absolute Plumbing Services':1,
+        'Jervis Bay Plumbing':2,
+        'Nowra Emergency Plumbing':3,
+        'Michael Sinclair - Plumber Drainer Gasfitter':4,
+        'Steve Watson Plumbing':5,
+        'TY WATSON PLUMBING':6,
+        'Shoalhaven Plumbing':7,
+        'Shoal Plumbing':8,
+        'Morris Plumbing':9,
+        'Culburra Plumbing Services - Chris Quinan':10,
+        'O’Brien Plumbing Batemans Bay':11,
+        'Brian Gould - BW + SJ Gould Plumbing':12,
+        // Electricians (after plumbers in South)
+        'Allman Electrical Services':20,
+        'Jervis Bay Electrical':21,
+        'Scott McCartney - Helping Hand Electrical & Handyman repairs':22,
+        'In-Line Electrical Pty Ltd':23,
+        'Skellec Electrical':24,
+        'Cory Jeacocke Electrical':25,
+        'The Berry Sparky':26,
+        'Hortle Electric':27,
+        'Adam Hamshere Electrical Contractor':28
+      }
+    };
+    const list = vendors
+      .filter(v=>v.regions.includes(region) || v.travel)
+      .map(v=>({
+        name:v.name,
+        exact:v.regions.includes(region),
+        score:(v.regions.includes(region)?0:1),
+        pref:(priority[region]&&priority[region][v.name])||99
+      }))
+      .sort((a,b)=>a.score-b.score || a.pref-b.pref)
+      .map(v=>v.name);
+    return list;
   }
   function makeSel(opts,value){
     const sel=document.createElement('select'); sel.innerHTML='<option value="">— Select —</option>' + opts.map(o=>`<option>${o}</option>`).join('');
     sel.value=value||''; return sel;
   }
   function makeRegionSel(value){
-    const sel=document.createElement('select'); sel.innerHTML=regions.map(r=>`<option>${r}</option>`).join(''); sel.value=value; return sel;
+    const sel=document.createElement('select'); sel.innerHTML=regions.map(r=>`<option>${r}</option>`).join(''); sel.value=value||''; return sel;
   }
   function render(){
-    const tb=$('#assignTbl tbody'); tb.innerHTML='';
+    const tb=$('#assignTbl tbody'); if(!tb) return; tb.innerHTML='';
     rows.forEach((r,i)=>{
       const tr=document.createElement('tr');
       const tdName=document.createElement('td'); tdName.textContent=r.property; tr.appendChild(tdName);
@@ -207,7 +337,7 @@ All‑Area Plumbing | Berry, South, North, West | Y</textarea>
       cols.push(r.notes);
       lines.push(cols.map(esc).join(','));
     });
-    const blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+    const blob=new Blob([lines.join('\r\n')],{type:'text/csv;charset=utf-8;'});
     const a=document.createElement('a');
     const fname = which==='elec' ? 'PHH_Electricians.csv' : which==='plumb' ? 'PHH_Plumbers.csv' : 'PHH_Trade_Assignments.csv';
     a.href=URL.createObjectURL(blob); a.download=fname; a.click(); URL.revokeObjectURL(a.href);
@@ -221,20 +351,172 @@ All‑Area Plumbing | Berry, South, North, West | Y</textarea>
     render();
   }
 
+  // --- Importers ---
+  async function importPropsCSV(){
+    const f=$('#propCsv').files[0]; if(!f){setMsg('Choose a properties CSV or paste into the box below.','warn'); return;}
+    const text=await readFile(f); importPropsFromText(text, f.name);
+  }
+  function importPropsFromText(text, label='pasted text'){
+    const data=parseCSV(text); if(!data.length){setMsg('No rows found in properties CSV','warn');return}
+    const headers=data[0].map(h=>h.trim());
+    const idxName=findHeaderIndex(headers,['^property$','^property_name$','^name$']);
+    const idxRegion=findHeaderIndex(headers,['^region$','^area$','^cluster$','^suburb$','^location$']);
+    if(idxName===null){setMsg('Could not find a Property/Property_Name column.','warn');return}
+    const imported=data.slice(1).map(r=>({property:r[idxName]||'', region:(idxRegion!==null? r[idxRegion] : regions[0])||regions[0], ep:'',eb:'',pp:'',pb:'',notes:''})).filter(r=>r.property);
+    rows = dedupeBy(rows.concat(imported),'property'); render();
+    setMsg(`Imported ${imported.length} properties from ${label}.`,'ok');
+  }
+
+  async function importVendorsCSV(which){
+    const input = which==='elec'? '#elecCsv' : '#plumbCsv';
+    const f=$(input).files[0]; if(!f){setMsg(`Choose a ${which} CSV or paste into the box below.`,'warn'); return;}
+    const text=await readFile(f); importVendorsFromText(which,text,f.name);
+  }
+  function importVendorsFromText(which,text,label='pasted text'){
+    const data=parseCSV(text); if(!data.length){setMsg('No rows found','warn');return}
+    const headers=data[0].map(h=>h.trim());
+    const idxName=findHeaderIndex(headers,['name','company','business','vendor']);
+    const idxRegs=findHeaderIndex(headers,['region','regions','areas','coverage','zone','zones','suburb','suburbs']);
+    const idxTravel=findHeaderIndex(headers,['travel','willtravel','will_travel','travel_ok','willing_to_travel']);
+    if(idxName===null){setMsg('Could not find a Name/Company column.','warn');return}
+    const items=data.slice(1).map(r=>({
+      name:canonicalName(r[idxName]||''),
+      regions: normalizeRegions(idxRegs!==null? r[idxRegs] : ''),
+      travel: String(idxTravel!==null? r[idxTravel] : '').toLowerCase().match(/^(y|1|true|t)$/)? true : false
+    })).filter(v=>v.name);
+    const deduped=dedupeBy(items,'name');
+    if(which==='elec'){ elecs = dedupeBy(elecs.concat(deduped) { plumbs = dedupeBy(plumbs.concat(deduped),'name'); }
+    render();
+    setMsg(`Imported ${deduped.length} ${which==='elec'?'electricians':'plumbers'} from ${label}.`,'ok');
+  }
+
+  // Preload full PHH list (properties + electricians) and auto-fill
+  function guessRegion(name){
+    const s=String(name||'').toLowerCase();
+    if(/callala|currarong|culburra|husk|husky|jervis/.test(s)) return 'South';
+    if(/berry/.test(s)) return 'Berry';
+    return '';
+  }
+  function loadFromPreload(){
+    // Electricians roster (regions + travel)
+    elecs = [
+      {name:'Cory Jeacocke Electrical', regions:['Berry','South'], travel:true},
+      {name:'The Berry Sparky', regions:['Berry'], travel:true},
+      {name:'Allman Electrical Services', regions:['South','Berry'], travel:true},
+      {name:'Jervis Bay Electrical', regions:['South'], travel:false},
+      {name:'Scott McCartney - Helping Hand Electrical & Handyman repairs', regions:['South'], travel:true},
+      {name:'Hortle Electric', regions:['Berry','South'], travel:true},
+      {name:'Skellec Electrical', regions:['South'], travel:true},
+      {name:'In-Line Electrical Pty Ltd', regions:['South'], travel:true},
+      {name:'Adam Hamshere Electrical Contractor', regions:['Berry','South'], travel:true},
+      {name:'Williamson Electrical NSW', regions:['South'], travel:true}
+    ];
+
+    // Plumbers roster (regions + travel) — from your paste
+    plumbs = [
+      {name:'Absolute Plumbing Services', regions:['Berry','South'], travel:true},
+      {name:'Jervis Bay Plumbing', regions:['South'], travel:false},
+      {name:'Nowra Emergency Plumbing', regions:['South'], travel:true},
+      {name:'Shoalhaven Plumbing', regions:['South'], travel:true},
+      {name:'O’Brien Plumbing Batemans Bay', regions:['South'], travel:false},
+      {name:'Brian Gould - BW + SJ Gould Plumbing', regions:['South'], travel:true},
+      {name:'Steve Watson Plumbing', regions:['South'], travel:true},
+      {name:'TY WATSON PLUMBING', regions:['South'], travel:true},
+      {name:'Morris Plumbing', regions:['South'], travel:true},
+      {name:'Michael Sinclair - Plumber Drainer Gasfitter', regions:['South'], travel:true},
+      {name:'Culburra Plumbing Services - Chris Quinan', regions:['South'], travel:true},
+      {name:'Shoal Plumbing', regions:['South'], travel:true},
+      // observed variant in data
+      {name:'Absolute Plumbing SeAbsolute Plumbing Services'South'], travel:true}
+    ];
+
+    const N = [
+      '1 Bed Apt - 1B','1 Bed Apt - 2B','1 Bed Apt - 3B','1 Bed Apt - 4B','1 Bed Apt - 5B','1 Bed Apt - 6B',
+      '2 Bed Apt - 10','2 Bed Apt - 11','2 Bed Apt - 12','2 Bed Apt - 7','2 Bed Apt - 8','2 Bed Apt - 9',
+      '3 Pillars','A Touch of Paradise','Adrift','Alkirari','Anglesey','Aqua Beachfront','Arklow','Azure','Azure Studio','Baci Al Mare','Bahia','Bamboo Hideaway','Banksia','Bathers','Bay Blu','Bay Gem','Bayview','Beach Central','Beachcomber @ Currarong','Beachhouse Currarong','Beachway','Beachwood','Beauts','Belmondo','Blenheim Hideaway','Blue Island','Bluetongue','Bluewater','Boho','Bonnie\'s Bliss','Bower\'s Nest','Breathe','Burra Beachy','Burra Days','Burroo','Buwadi','Callala Bay Gem','Callala Beach Walk','Callala Calm','Callala Dreams','Callala Haven','Callala on King','Callala Sunrise','Calming Waters','Calypso','Camellia','Carramar','Coastal Capers','Coastal Oasis','Coastaway','Coca Callala','Come Wot Mey','Crystal Bay','Curley’s Sunsets','Curleys Outlook','Da Roost','Delamere','Eagles Point','East Side Sands','Eclipse','Enchante`','Endless Summer','Fishery Road Cottage','Fleur de Chalet','Ginger\'s','Glory House','Golden Sands','Grey Gables','Gumnut','Hanalei','Havenwood','Hayes Beach House','Hidden Orchard','High Tide','Husky Sands','Idle Hours','Illaroo','Indigo','Innisfree','Jack\'s Culburra','Jasmine House','Jervis Bay Beach Shack','Just Beachy','Keppel','Kingfisher','Kirkland','La Belle Vie','La Vista','Lake House','Lakeviews','Lemon Drop','Lemon Drop 2','Lumina','Malda\'s Retreat','Mar-Lins','Meeseeks','Middle Sea','Mirigaan','Mulberry House','Nalu','Nautilus','Neptune','Nest','Nordic Fairway','Ocean Dunes','Oceanside','On The Lake','Ours & Yours','Pagoda','Palms','Pax & Coral','Pax & Coral 2','Peppertree','Periwinkle','Piccolo Cottage','Pipers Spot','Prez Cote La Plaz','Quay\'s Cabin','Reflections','Rest','Rockpool','Rockwall','Roskell Retreat','Saltbush Cottage','Salty Shores','Sanctuary Blue','Sandlewood Breeze','Sandy Feet Retreat','Sandy Rays','Saoire','Sapphire Sands','Scribbly Gum','Sea and Sun','Sea La Vie','Seagrass','Seahaven','Seas the Day','Seaview','Serendipity Stays','Serene','Shiloh Shores','Shores','Sirius Retreat','Solymar','Sommarhuset','Spinnaker','Spoondrift','Stella','Studio - 2A','Studio - 3A','Studio - 4A','Studio - 5A','Studio - 6A','Sunbaker Beach House','Sunfish','Sunsets','Sunsets 2','Surfside','Surfspray','Swell','Tangerine','Thalassa','The Anchor','The Cabana','The Cabin','The Castle','The Coast Beach','The Crescent','The Dairy @ Cavan','The Deckhouse','The Palings','The Relax Shack','The Treehouse','The Verge Beach House','The Waterfront House','This is Livin\'','Tilly\'s Retreat','Time and Tide','Unwind','Villa Franco','Villa Mare','Villa Maris','Villa Zelma','Wagtails','Water Lane','Watermans','Watersedge','Wavesong on Watts','Whitewash','Wildwood','WindanSea Cottage','Yelo'
+    ];
+
+    rows = N.map(n=>({property:n, region:guessRegiplumbs = dedupeBy(plumbs.map(v=>({...v, name:canonicalName(v.name)})),'name');
+    elecs = dedupeBy(elecs.map(v=>({...v, name:canonicalName(v.name)})),'name');
+    rows = N.map( eb:'', pp:'', pb:'', notes:''}));
+
+    // Auto-fill best-guess Primary/Backup by region priority
+    autoFill();
+  }
+
   // Hook up controls
-  $('#applyRegions').addEventListener('click',()=>{ regions=$('#regions').value.split(/\n+/).map(s=>s.trim()).filter(Boolean); render(); });
-  $('#applyElecs').addEventListener('click',()=>{ elecs=parseVendors($('#elecs').value); render(); });
-  $('#applyPlumbs').addEventListener('click',()=>{ plumbs=parseVendors($('#plumbs').value); render(); });
-  $('#addRows').addEventListener('click',()=>{ rows = rows.concat(parseProps($('#props').value)); render(); });
-  $('#clearRows').addEventListener('click',()=>{ rows=[]; render(); });
+  $('#applyRegions').addEventListener('click',()=>{ regions=$('#regions').value.split(/\n+/).map(s=>s.trim()).filter(Boolean); render(); setMsg('Regions updated.','ok'); });
+  $('#applyElecsstener('click',()=>{ elecs=parseTextVendors($('#elecs').value); render(); setMsg('Electricians list applied.','ok'); });
+  $('#applyPlumbs').addEventListener('click',()=>{ plumbs=parseTextVendors($('#plumbs').value); render(); setMsg('Plumbers list applied.','ok'); });
+  $('#addRows').addEventListener('click',()=>{ rows = rows.concat(parseProps($('#props').value)); render(); setMsg('Property rows added.','ok'); });
+  $('#clearRows').addEventListener('click',()=>{ rows=[]; render(); setMsg('Property rows cleared.','warn'); });
   $('#autoFill').addEventListener('click',autoFill);
-  $('#clearSelects').addEventListener('click',()=>{ rows.forEach(r=>{r.ep=r.eb=r.pp=r.pb=''}); render(); });
+  $('#clearSelects').addEventListener('click',()=>{ rows.forEach(r=>{r.ep=r.eb=r.pp=r.pb=''}); render(); setMsg('Selections cleared.','warn'); });
   $('#exportAll').addEventListener('click',()=>exportCSV('all'));
   $('#exportElec').addEventListener('click',()=>exportCSV('elec'));
   $('#exportPlumb').addEventListener('click',()=>exportCSV('plumb'));
+  $('#importElec').addEventListener('click',()=>importVendorsCSV('elec'));
+  $('#importPlumb').addEventListener('click',()=>importVendorsCSV('plumb'));
+  $('#importProps').addEventListener('click',importPropsCSV);
+  $('#importPropText').addEventListener('click',()=>importPropsFromText($('#propCsvText').value,'pasted CSV'));
+  $('#importElecText').addEventListener('click',()=>importVendorsFromText('elec',$('#elecCsvText').value,'pasted CSV'));
+  $('#importPlumbText').addEventListener('click',()=>importVendorsFromText('plumb',$('#plumbCsvText').value,'pasted CSV'));
 
-  // init vendors/rows from defaults
-  elecs=parseVendors($('#elecs').value); plumbs=parseVendors($('#plumbs').value); rows=parseProps($('#props').value); render();
+  // text parsers (paste mode)
+  function parseTextVendors(text){
+    return String(text||'').split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{
+      const parts=l.split('|').map(x=>x.trim());
+      let name=parts[0]||''; let regs=(parts[1]||'').split(',').mlet name=canonicalName(parts[0]||'');(Boolean);
+      let travel=((parts[2]||'N').toUpperCase().startsWith('Y'));
+      return {name,regions:regs,travel};
+    }).filter(v=>v.name);
+  }
+  function parseProps(text){
+    return String(text||'').split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{
+      const parts=l.sp());
+      return {property:parts[0]||'', region:parts[1]||regions[0], ep:'', eb:'', pp:'', pb:'', notes:''};
+    }).filter(r=>r.property);
+  }
+
+  // ---- Self-tests (minimal) ----
+  function runSelfTests(){
+    try{
+      // CSV parsing tests
+      let csv1 = 'A,B,C
+1,2,3
+4,5,6';
+      let r1 = parseCSV(csv1); console.assert(r1.length===3 && r1[1][0]==='1' && r1[2][2]==='6','CSV comma basic failed');
+      let csv2 = 'A|B|C
+1|2|3';
+      let r2 = parseCSV(csv2); console.assert(r2.length===2 && r2[1][1]==='2','CSV pipe basic failed');
+      let csv3 = 'A	B	C
+1	2	3';
+      let r3 = parseCSV(csv3); console.assert(r3.length===2 && r3[1][2]==='3','CSV tab basic failed');
+      let csv4 = 'A,B
+"x,y",z';
+      let r4 = parseCSV(csv4); console.assert(r4.length===2 && r4[1][0]==='x,y','CSV quoted field failed');
+      // Text vendor parser
+      let tv = 'Vendor One | Berry, South | Y
+Vendor Two | North | N';
+      let tvR = parseTextVendors(tv); console.assert(tvR.length===2 && tvR[0].regions.includes('Berry') && tvR[1].travel===false,'Vendor text parse failed');
+      // Plumber priority test
+      let pv = optionsFor([
+        {name:'Absolute Plumbing Services', regions:['South'], travel:true},
+        {name:'Jervis Bay Plumbing', regions:['South'], travel:false}
+      ], 'South');
+      console.assert(pv[0]==='Absolute Plumbing Services' && pv[1]==='Jervis Bay Plumbing','Plumber priority (South) failed');
+      setMsg('Self-tests passed. Ready.','ok');
+    }catch(e){
+      console.error('Sel// Canonicalization test
+      let merged = dedupeBy(['Absolute Plumbing Service','Absolute Plumbing Services'].map(n=>({name:canonicalName(n)})),'name');
+      console.assert(merged.length===1 && merged[0].name==='Absolute Plumbing Services','Canonicalization failed');
+      setMsg('Self-tests passed. Ready.'ts failed: '+e.message,'warn');
+    }
+  }
+
+  loadFromPreload();
+  render();
+  runSelfTests();
 })();
 </script>
 </body>
