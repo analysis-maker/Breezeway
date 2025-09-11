@@ -213,10 +213,29 @@ Berry Flow,Berry,Y"></textarea>
 
   // Canonical name normalizer (merge common variants)
   function canonicalName(name){
-    let n = String(name||'').replace(/\s+/g,' ').trim();
-    // Absolute Plumbing Service -> Absolute Plumbing Services (singular to plural)
-    if(/^absolute plumbing service$/i.test(n)) n = 'Absolute Plumbing Services';
+    let n = String(name||'')
+      .normalize('NFKC')
+      .replace(/[’‘`]/g, "'") // curly → straight apostrophe/backtick
+      .replace(/\s+/g,' ')
+      .trim();
+    const lc = n.toLowerCase();
+    // Absolute Plumbing Service(s) → Absolute Plumbing Services
+    if(lc === 'absolute plumbing service' || lc === 'absolute plumbing services') n = 'Absolute Plumbing Services';
+    // O’Brien / O'brien variants → O'Brien Plumbing Batemans Bay
+    if(lc === "o'brien plumbing batemans bay" || lc === "o’brien plumbing batemans bay") n = "O'Brien Plumbing Batemans Bay";
+    // Ty Watson Plumbing (any case) → Ty Watson Plumbing
+    if(lc === 'ty watson plumbing') n = 'Ty Watson Plumbing';
+    // repairs → Repairs (casing)
+    if(lc === 'scott mccartney - helping hand electrical & handyman repairs') n = 'Scott McCartney - Helping Hand Electrical & Handyman Repairs';
     return n;
+  }
+
+  function canonicalProperty(name){
+    return String(name||'')
+      .normalize('NFKC')
+      .replace(/[’‘`]/g, "'")
+      .replace(/\s+/g,' ')
+      .trim();
   }
 
   // --- UI builders ---
@@ -230,10 +249,10 @@ Berry Flow,Berry,Y"></textarea>
         'Jervis Bay Plumbing':4,
         'Michael Sinclair - Plumber Drainer Gasfitter':5,
         'Steve Watson Plumbing':6,
-        'TY WATSON PLUMBING':7,
+        'Ty Watson Plumbing':7,
         'Morris Plumbing':8,
         'Culburra Plumbing Services - Chris Quinan':9,
-        'O’Brien Plumbing Batemans Bay':10,
+        'O'Brien Plumbing Batemans Bay':10,
         'Brian Gould - BW + SJ Gould Plumbing':11,
         'Shoal Plumbing':12,
         // Electricians (lower priority numbers win; keep plumbers ahead in Berry)
@@ -244,7 +263,7 @@ Berry Flow,Berry,Y"></textarea>
         'Adam Hamshere Electrical Contractor':24,
         'In-Line Electrical Pty Ltd':25,
         'Skellec Electrical':26,
-        'Scott McCartney - Helping Hand Electrical & Handyman repairs':27,
+        'Scott McCartney - Helping Hand Electrical & Handyman Repairs':27,
         'Jervis Bay Electrical':28
       },
       'South': {
@@ -254,17 +273,17 @@ Berry Flow,Berry,Y"></textarea>
         'Nowra Emergency Plumbing':3,
         'Michael Sinclair - Plumber Drainer Gasfitter':4,
         'Steve Watson Plumbing':5,
-        'TY WATSON PLUMBING':6,
+        'Ty Watson Plumbing':6,
         'Shoalhaven Plumbing':7,
         'Shoal Plumbing':8,
         'Morris Plumbing':9,
         'Culburra Plumbing Services - Chris Quinan':10,
-        'O’Brien Plumbing Batemans Bay':11,
+        'O'Brien Plumbing Batemans Bay':11,
         'Brian Gould - BW + SJ Gould Plumbing':12,
         // Electricians (after plumbers in South)
         'Allman Electrical Services':20,
         'Jervis Bay Electrical':21,
-        'Scott McCartney - Helping Hand Electrical & Handyman repairs':22,
+        'Scott McCartney - Helping Hand Electrical & Handyman Repairs':22,
         'In-Line Electrical Pty Ltd':23,
         'Skellec Electrical':24,
         'Cory Jeacocke Electrical':25,
@@ -331,9 +350,9 @@ Berry Flow,Berry,Y"></textarea>
     header.push('Notes');
     const lines=[header.join(',')];
     rows.forEach(r=>{
-      const cols=[r.property,r.region];
-      if(which==='all' || which==='elec'){ cols.push(r.ep,r.eb); }
-      if(which==='all' || which==='plumb'){ cols.push(r.pp,r.pb); }
+      const cols=[canonicalProperty(r.property), r.region];
+      if(which==='all' || which==='elec'){ cols.push(canonicalName(r.ep), canonicalName(r.eb)); }
+      if(which==='all' || which==='plumb'){ cols.push(canonicalName(r.pp), canonicalName(r.pb)); }
       cols.push(r.notes);
       lines.push(cols.map(esc).join(','));
     });
@@ -362,7 +381,7 @@ Berry Flow,Berry,Y"></textarea>
     const idxName=findHeaderIndex(headers,['^property$','^property_name$','^name$']);
     const idxRegion=findHeaderIndex(headers,['^region$','^area$','^cluster$','^suburb$','^location$']);
     if(idxName===null){setMsg('Could not find a Property/Property_Name column.','warn');return}
-    const imported=data.slice(1).map(r=>({property:r[idxName]||'', region:(idxRegion!==null? r[idxRegion] : regions[0])||regions[0], ep:'',eb:'',pp:'',pb:'',notes:''})).filter(r=>r.property);
+    const imported=data.slice(1).map(r=>({property:canonicalProperty(r[idxName]||''), region:(idxRegion!==null? r[idxRegion] : regions[0])||regions[0], ep:'',eb:'',pp:'',pb:'',notes:''})).filter(r=>r.property);
     rows = dedupeBy(rows.concat(imported),'property'); render();
     setMsg(`Imported ${imported.length} properties from ${label}.`,'ok');
   }
@@ -405,7 +424,7 @@ Berry Flow,Berry,Y"></textarea>
       {name:'The Berry Sparky', regions:['Berry'], travel:true},
       {name:'Allman Electrical Services', regions:['South','Berry'], travel:true},
       {name:'Jervis Bay Electrical', regions:['South'], travel:false},
-      {name:'Scott McCartney - Helping Hand Electrical & Handyman repairs', regions:['South'], travel:true},
+      {name:'Scott McCartney - Helping Hand Electrical & Handyman Repairs', regions:['South'], travel:true},
       {name:'Hortle Electric', regions:['Berry','South'], travel:true},
       {name:'Skellec Electrical', regions:['South'], travel:true},
       {name:'In-Line Electrical Pty Ltd', regions:['South'], travel:true},
@@ -419,10 +438,10 @@ Berry Flow,Berry,Y"></textarea>
       {name:'Jervis Bay Plumbing', regions:['South'], travel:false},
       {name:'Nowra Emergency Plumbing', regions:['South'], travel:true},
       {name:'Shoalhaven Plumbing', regions:['South'], travel:true},
-      {name:'O’Brien Plumbing Batemans Bay', regions:['South'], travel:false},
+      {name:'O'Brien Plumbing Batemans Bay', regions:['South'], travel:false},
       {name:'Brian Gould - BW + SJ Gould Plumbing', regions:['South'], travel:true},
       {name:'Steve Watson Plumbing', regions:['South'], travel:true},
-      {name:'TY WATSON PLUMBING', regions:['South'], travel:true},
+      {name:'Ty Watson Plumbing', regions:['South'], travel:true},
       {name:'Morris Plumbing', regions:['South'], travel:true},
       {name:'Michael Sinclair - Plumber Drainer Gasfitter', regions:['South'], travel:true},
       {name:'Culburra Plumbing Services - Chris Quinan', regions:['South'], travel:true},
@@ -439,7 +458,7 @@ Berry Flow,Berry,Y"></textarea>
 
     plumbs = dedupeBy(plumbs.map(v=>({...v, name:canonicalName(v.name)})),'name');
     elecs = dedupeBy(elecs.map(v=>({...v, name:canonicalName(v.name)})),'name');
-    rows = N.map(n=>({property:n, region:guessRegion(n), ep:'', eb:'', pp:'', pb:'', notes:''}));
+    rows = N.map(n=>({property:canonicalProperty(n), region:guessRegion(n), ep:'', eb:'', pp:'', pb:'', notes:''}));
 
     // Auto-fill best-guess Primary/Backup by region priority
     autoFill();
@@ -475,7 +494,7 @@ Berry Flow,Berry,Y"></textarea>
   function parseProps(text){
     return String(text||'').split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{
       const parts=l.split('|').map(x=>x.trim());
-      return {property:parts[0]||'', region:parts[1]||regions[0], ep:'', eb:'', pp:'', pb:'', notes:''};
+      return {property:canonicalProperty(parts[0]||''), region:parts[1]||regions[0], ep:'', eb:'', pp:'', pb:'', notes:''};
     }).filter(r=>r.property);
   }
 
@@ -483,22 +502,16 @@ Berry Flow,Berry,Y"></textarea>
   function runSelfTests(){
     try{
       // CSV parsing tests
-      let csv1 = 'A,B,C
-1,2,3
-4,5,6';
+      let csv1 = 'A,B,C\n1,2,3\n4,5,6';
       let r1 = parseCSV(csv1); console.assert(r1.length===3 && r1[1][0]==='1' && r1[2][2]==='6','CSV comma basic failed');
-      let csv2 = 'A|B|C
-1|2|3';
+      let csv2 = 'A|B|C\n1|2|3';
       let r2 = parseCSV(csv2); console.assert(r2.length===2 && r2[1][1]==='2','CSV pipe basic failed');
-      let csv3 = 'A	B	C
-1	2	3';
+      let csv3 = 'A\tB\tC\n1\t2\t3';
       let r3 = parseCSV(csv3); console.assert(r3.length===2 && r3[1][2]==='3','CSV tab basic failed');
-      let csv4 = 'A,B
-"x,y",z';
+      let csv4 = 'A,B\n"x,y",z';
       let r4 = parseCSV(csv4); console.assert(r4.length===2 && r4[1][0]==='x,y','CSV quoted field failed');
       // Text vendor parser
-      let tv = 'Vendor One | Berry, South | Y
-Vendor Two | North | N';
+      let tv = 'Vendor One | Berry, South | Y\nVendor Two | North | N';
       let tvR = parseTextVendors(tv); console.assert(tvR.length===2 && tvR[0].regions.includes('Berry') && tvR[1].travel===false,'Vendor text parse failed');
       // Plumber priority test
       let pv = optionsFor([
@@ -506,9 +519,13 @@ Vendor Two | North | N';
         {name:'Jervis Bay Plumbing', regions:['South'], travel:false}
       ], 'South');
       console.assert(pv[0]==='Absolute Plumbing Services' && pv[1]==='Jervis Bay Plumbing','Plumber priority (South) failed');
-      // Canonicalization test
+      // Canonicalization tests
       let merged = dedupeBy(['Absolute Plumbing Service','Absolute Plumbing Services'].map(n=>({name:canonicalName(n)})),'name');
       console.assert(merged.length===1 && merged[0].name==='Absolute Plumbing Services','Canonicalization failed');
+      let ob = dedupeBy(["O’Brien Plumbing Batemans Bay","O'Brien Plumbing Batemans Bay"].map(n=>({name:canonicalName(n)})),'name');
+      console.assert(ob.length===1 && ob[0].name==="O'Brien Plumbing Batemans Bay","O'Brien canonicalization failed");
+      console.assert(canonicalName('TY WATSON PLUMBING')==='Ty Watson Plumbing','Ty Watson casing failed');
+      console.assert(canonicalProperty("Curley’s Sunsets")==="Curley's Sunsets",'Property apostrophe normalization failed');
       setMsg('Self-tests passed. Ready.','ok');
     }catch(e){
       console.error('Self-test error',e); setMsg('Self-tests failed: '+e.message,'warn');
