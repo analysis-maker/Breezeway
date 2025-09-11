@@ -213,7 +213,7 @@ Berry Flow,Berry,Y"></textarea>
 
   // Canonical name normalizer (merge common variants)
   function canonicalName(name){
-    let n = String(name||'').replace(/\\s+/g,' ').trim();
+    let n = String(name||'').replace(/\s+/g,' ').trim();
     // Absolute Plumbing Service -> Absolute Plumbing Services (singular to plural)
     if(/^absolute plumbing service$/i.test(n)) n = 'Absolute Plumbing Services';
     return n;
@@ -385,7 +385,8 @@ Berry Flow,Berry,Y"></textarea>
       travel: String(idxTravel!==null? r[idxTravel] : '').toLowerCase().match(/^(y|1|true|t)$/)? true : false
     })).filter(v=>v.name);
     const deduped=dedupeBy(items,'name');
-    if(which==='elec'){ elecs = dedupeBy(elecs.concat(deduped) { plumbs = dedupeBy(plumbs.concat(deduped),'name'); }
+    if(which==='elec'){ elecs = dedupeBy(elecs.concat(deduped),'name'); }
+    else { plumbs = dedupeBy(plumbs.concat(deduped),'name'); }
     render();
     setMsg(`Imported ${deduped.length} ${which==='elec'?'electricians':'plumbers'} from ${label}.`,'ok');
   }
@@ -427,18 +428,18 @@ Berry Flow,Berry,Y"></textarea>
       {name:'Culburra Plumbing Services - Chris Quinan', regions:['South'], travel:true},
       {name:'Shoal Plumbing', regions:['South'], travel:true},
       // observed variant in data
-      {name:'Absolute Plumbing SeAbsolute Plumbing Services'South'], travel:true}
+      {name:'Absolute Plumbing Services', regions:['Berry','South'], travel:true}
     ];
 
     const N = [
       '1 Bed Apt - 1B','1 Bed Apt - 2B','1 Bed Apt - 3B','1 Bed Apt - 4B','1 Bed Apt - 5B','1 Bed Apt - 6B',
       '2 Bed Apt - 10','2 Bed Apt - 11','2 Bed Apt - 12','2 Bed Apt - 7','2 Bed Apt - 8','2 Bed Apt - 9',
-      '3 Pillars','A Touch of Paradise','Adrift','Alkirari','Anglesey','Aqua Beachfront','Arklow','Azure','Azure Studio','Baci Al Mare','Bahia','Bamboo Hideaway','Banksia','Bathers','Bay Blu','Bay Gem','Bayview','Beach Central','Beachcomber @ Currarong','Beachhouse Currarong','Beachway','Beachwood','Beauts','Belmondo','Blenheim Hideaway','Blue Island','Bluetongue','Bluewater','Boho','Bonnie\'s Bliss','Bower\'s Nest','Breathe','Burra Beachy','Burra Days','Burroo','Buwadi','Callala Bay Gem','Callala Beach Walk','Callala Calm','Callala Dreams','Callala Haven','Callala on King','Callala Sunrise','Calming Waters','Calypso','Camellia','Carramar','Coastal Capers','Coastal Oasis','Coastaway','Coca Callala','Come Wot Mey','Crystal Bay','Curley’s Sunsets','Curleys Outlook','Da Roost','Delamere','Eagles Point','East Side Sands','Eclipse','Enchante`','Endless Summer','Fishery Road Cottage','Fleur de Chalet','Ginger\'s','Glory House','Golden Sands','Grey Gables','Gumnut','Hanalei','Havenwood','Hayes Beach House','Hidden Orchard','High Tide','Husky Sands','Idle Hours','Illaroo','Indigo','Innisfree','Jack\'s Culburra','Jasmine House','Jervis Bay Beach Shack','Just Beachy','Keppel','Kingfisher','Kirkland','La Belle Vie','La Vista','Lake House','Lakeviews','Lemon Drop','Lemon Drop 2','Lumina','Malda\'s Retreat','Mar-Lins','Meeseeks','Middle Sea','Mirigaan','Mulberry House','Nalu','Nautilus','Neptune','Nest','Nordic Fairway','Ocean Dunes','Oceanside','On The Lake','Ours & Yours','Pagoda','Palms','Pax & Coral','Pax & Coral 2','Peppertree','Periwinkle','Piccolo Cottage','Pipers Spot','Prez Cote La Plaz','Quay\'s Cabin','Reflections','Rest','Rockpool','Rockwall','Roskell Retreat','Saltbush Cottage','Salty Shores','Sanctuary Blue','Sandlewood Breeze','Sandy Feet Retreat','Sandy Rays','Saoire','Sapphire Sands','Scribbly Gum','Sea and Sun','Sea La Vie','Seagrass','Seahaven','Seas the Day','Seaview','Serendipity Stays','Serene','Shiloh Shores','Shores','Sirius Retreat','Solymar','Sommarhuset','Spinnaker','Spoondrift','Stella','Studio - 2A','Studio - 3A','Studio - 4A','Studio - 5A','Studio - 6A','Sunbaker Beach House','Sunfish','Sunsets','Sunsets 2','Surfside','Surfspray','Swell','Tangerine','Thalassa','The Anchor','The Cabana','The Cabin','The Castle','The Coast Beach','The Crescent','The Dairy @ Cavan','The Deckhouse','The Palings','The Relax Shack','The Treehouse','The Verge Beach House','The Waterfront House','This is Livin\'','Tilly\'s Retreat','Time and Tide','Unwind','Villa Franco','Villa Mare','Villa Maris','Villa Zelma','Wagtails','Water Lane','Watermans','Watersedge','Wavesong on Watts','Whitewash','Wildwood','WindanSea Cottage','Yelo'
+      '3 Pillars','A Touch of Paradise','Adrift','Alkira','Aloha','Amaroo','Anacapri','Anglesey','Aqua Beachfront','Arklow','Azure','Azure Studio','Baci Al Mare','Bahia','Bamboo Hideaway','Banksia','Bathers','Bay Blu','Bay Gem','Bayview','Beach Central','Beachcomber @ Currarong','Beachhouse Currarong','Beachway','Beachwood','Beauts','Belmondo','Blenheim Hideaway','Blue Island','Bluetongue','Bluewater','Boho','Bonnie\'s Bliss','Bower\'s Nest','Breathe','Burra Beachy','Burra Days','Burroo','Buwadi','Callala Bay Gem','Callala Beach Walk','Callala Calm','Callala Dreams','Callala Haven','Callala on King','Callala Sunrise','Calming Waters','Calypso','Camellia','Carramar','Coastal Capers','Coastal Oasis','Coastaway','Coca Callala','Come Wot Mey','Crystal Bay','Curley’s Sunsets','Curleys Outlook','Da Roost','Delamere','Eagles Point','East Side Sands','Eclipse','Enchante`','Endless Summer','Fishery Road Cottage','Fleur de Chalet','Ginger\'s','Glory House','Golden Sands','Grey Gables','Gumnut','Hanalei','Havenwood','Hayes Beach House','Hidden Orchard','High Tide','Husky Sands','Idle Hours','Illaroo','Indigo','Innisfree','Jack\'s Culburra','Jasmine House','Jervis Bay Beach Shack','Just Beachy','Keppel','Kingfisher','Kirkland','La Belle Vie','La Vista','Lake House','Lakeviews','Lemon Drop','Lemon Drop 2','Lumina','Malda\'s Retreat','Mar-Lins','Meeseeks','Middle Sea','Mirigaan','Mulberry House','Nalu','Nautilus','Neptune','Nest','Nordic Fairway','Ocean Dunes','Oceanside','On The Lake','Ours & Yours','Pagoda','Palms','Pax & Coral','Pax & Coral 2','Peppertree','Periwinkle','Piccolo Cottage','Pipers Spot','Prez Cote La Plaz','Quay\'s Cabin','Reflections','Rest','Rockpool','Rockwall','Roskell Retreat','Saltbush Cottage','Salty Shores','Sanctuary Blue','Sandlewood Breeze','Sandy Feet Retreat','Sandy Rays','Saoire','Sapphire Sands','Scribbly Gum','Sea and Sun','Sea La Vie','Seagrass','Seahaven','Seas the Day','Seaview','Serendipity Stays','Serene','Shiloh Shores','Shores','Sirius Retreat','Solymar','Sommarhuset','Spinnaker','Spoondrift','Stella','Studio - 2A','Studio - 3A','Studio - 4A','Studio - 5A','Studio - 6A','Sunbaker Beach House','Sunfish','Sunsets','Sunsets 2','Surfside','Surfspray','Swell','Tangerine','Thalassa','The Anchor','The Cabana','The Cabin','The Castle','The Coast Beach','The Crescent','The Dairy @ Cavan','The Deckhouse','The Palings','The Relax Shack','The Treehouse','The Verge Beach House','The Waterfront House','This is Livin\'','Tilly\'s Retreat','Time and Tide','Unwind','Villa Franco','Villa Mare','Villa Maris','Villa Zelma','Wagtails','Water Lane','Watermans','Watersedge','Wavesong on Watts','Whitewash','Wildwood','WindanSea Cottage','Yelo'
     ];
 
-    rows = N.map(n=>({property:n, region:guessRegiplumbs = dedupeBy(plumbs.map(v=>({...v, name:canonicalName(v.name)})),'name');
+    plumbs = dedupeBy(plumbs.map(v=>({...v, name:canonicalName(v.name)})),'name');
     elecs = dedupeBy(elecs.map(v=>({...v, name:canonicalName(v.name)})),'name');
-    rows = N.map( eb:'', pp:'', pb:'', notes:''}));
+    rows = N.map(n=>({property:n, region:guessRegion(n), ep:'', eb:'', pp:'', pb:'', notes:''}));
 
     // Auto-fill best-guess Primary/Backup by region priority
     autoFill();
@@ -446,7 +447,7 @@ Berry Flow,Berry,Y"></textarea>
 
   // Hook up controls
   $('#applyRegions').addEventListener('click',()=>{ regions=$('#regions').value.split(/\n+/).map(s=>s.trim()).filter(Boolean); render(); setMsg('Regions updated.','ok'); });
-  $('#applyElecsstener('click',()=>{ elecs=parseTextVendors($('#elecs').value); render(); setMsg('Electricians list applied.','ok'); });
+  $('#applyElecs').addEventListener('click',()=>{ elecs=parseTextVendors($('#elecs').value); render(); setMsg('Electricians list applied.','ok'); });
   $('#applyPlumbs').addEventListener('click',()=>{ plumbs=parseTextVendors($('#plumbs').value); render(); setMsg('Plumbers list applied.','ok'); });
   $('#addRows').addEventListener('click',()=>{ rows = rows.concat(parseProps($('#props').value)); render(); setMsg('Property rows added.','ok'); });
   $('#clearRows').addEventListener('click',()=>{ rows=[]; render(); setMsg('Property rows cleared.','warn'); });
@@ -466,14 +467,14 @@ Berry Flow,Berry,Y"></textarea>
   function parseTextVendors(text){
     return String(text||'').split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{
       const parts=l.split('|').map(x=>x.trim());
-      let name=parts[0]||''; let regs=(parts[1]||'').split(',').mlet name=canonicalName(parts[0]||'');(Boolean);
+      let name=canonicalName(parts[0]||''); let regs=(parts[1]||'').split(',').map(x=>x.trim()).filter(Boolean);
       let travel=((parts[2]||'N').toUpperCase().startsWith('Y'));
       return {name,regions:regs,travel};
     }).filter(v=>v.name);
   }
   function parseProps(text){
     return String(text||'').split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{
-      const parts=l.sp());
+      const parts=l.split('|').map(x=>x.trim());
       return {property:parts[0]||'', region:parts[1]||regions[0], ep:'', eb:'', pp:'', pb:'', notes:''};
     }).filter(r=>r.property);
   }
@@ -505,12 +506,12 @@ Vendor Two | North | N';
         {name:'Jervis Bay Plumbing', regions:['South'], travel:false}
       ], 'South');
       console.assert(pv[0]==='Absolute Plumbing Services' && pv[1]==='Jervis Bay Plumbing','Plumber priority (South) failed');
-      setMsg('Self-tests passed. Ready.','ok');
-    }catch(e){
-      console.error('Sel// Canonicalization test
+      // Canonicalization test
       let merged = dedupeBy(['Absolute Plumbing Service','Absolute Plumbing Services'].map(n=>({name:canonicalName(n)})),'name');
       console.assert(merged.length===1 && merged[0].name==='Absolute Plumbing Services','Canonicalization failed');
-      setMsg('Self-tests passed. Ready.'ts failed: '+e.message,'warn');
+      setMsg('Self-tests passed. Ready.','ok');
+    }catch(e){
+      console.error('Self-test error',e); setMsg('Self-tests failed: '+e.message,'warn');
     }
   }
 
