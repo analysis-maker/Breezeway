@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PHH Trade Assignment Fill‑In Sheet — Dropdowns + CSV/Text Import/Export</title>
+<title>PHH Trade Assignment — Standalone (Download & Print Ready)</title>
 <style>
   :root{--brand:#0b6b6f;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--bg:#fff}
   *{box-sizing:border-box}
@@ -14,39 +14,51 @@
   .sub{color:var(--muted);font-size:12px}
   h2{font-size:16px;margin:16px 0 8px}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .card{border:1px solid var(--line);border-radius:12px;padding:12px}
+  .card{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}
   label{display:block;font-weight:700;font-size:12px;margin-bottom:4px}
   textarea,input,select{width:100%;padding:8px;border:1px solid var(--line);border-radius:10px;font-size:14px}
   .row{display:grid;grid-template-columns:2fr 1fr;gap:8px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap}
   .btn{appearance:none;border:1px solid var(--brand);color:var(--brand);background:#eef7f8;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
-  .btn:disabled{opacity:.5;cursor:not-allowed}
   .btn.secondary{border-color:#cbd5e1;color:#334155;background:#f8fafc}
   .btn.ghost{border-color:#e5e7eb;color:#111827;background:#fff}
   table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
   th,td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
   thead th{background:#f8fafc;text-align:left;font-size:12px}
   tbody tr:nth-child(even){background:#fbfbfd}
-  .controls{display:flex;gap:8px;flex-wrap:wrap}
   .pill{display:inline-block;background:#eef7f8;color:var(--brand);border:1px solid #c8e6e8;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:700}
   .hint{color:var(--muted);font-size:12px}
-  .nowrap{white-space:nowrap}
   .zone{border:1px dashed #cbd5e1;border-radius:12px;padding:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .zone input{width:auto}
   .ok{color:#065f46}
   .warn{color:#92400e}
+
+  /* Print-safe layout */
+  @page { size: A4 landscape; margin: 10mm; }
+  @media print {
+    body{background:#fff}
+    .wrap{max-width:none;margin:0;padding:0}
+    header .controls{display:none!important}
+    .card{break-inside:avoid}
+    table{page-break-inside:auto}
+    thead{display:table-header-group}
+    tfoot{display:table-footer-group}
+    tr{page-break-inside:avoid;page-break-after:auto}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div>
-      <h1>PHH Trade Assignment Fill‑In Sheet (Angus)</h1>
-      <div class="sub">Primary + Backup per property • Region‑filtered dropdowns • **CSV <em>or</em> Paste‑in import** • Updated <span id="today"></span></div>
+      <h1>PHH Trade Assignment (Standalone)</h1>
+      <div class="sub">Primary + Backup per property • Region‑filtered dropdowns • CSV/Text import • Updated <span id="today"></span></div>
     </div>
     <div class="controls">
       <button class="btn" id="exportAll">Download Combined CSV</button>
       <button class="btn" id="exportElec">Download Electricians CSV</button>
       <button class="btn" id="exportPlumb">Download Plumbers CSV</button>
+      <button class="btn secondary" id="printPdf">Print / Save PDF</button>
     </div>
   </header>
 
@@ -182,8 +194,8 @@ Berry Flow,Berry,Y"></textarea>
     return best==='\\t'?'\t':best; // return real tab char
   }
   function parseCSV(text){
-    // normalize CRLF/CR to \n
-    const normalized = String(text||'').replace(/\r\n?/g,'\n');
+    // normalize CRLF/CR to \n and strip BOM
+    const normalized = String(text||'').replace(/^\uFEFF/, '').replace(/\r\n?/g,'\n');
     const lines = normalized.split('\n').filter(l=>l.trim().length>0);
     if(!lines.length) return [];
     const delim=detectDelim(lines[0]);
@@ -238,7 +250,26 @@ Berry Flow,Berry,Y"></textarea>
       .trim();
   }
 
-  // --- UI builders ---
+  // --- UI builders (safe DOM, no innerHTML with vendor text) ---
+  function makeOption(text){
+    const opt=document.createElement('option');
+    opt.textContent=text; // safe: avoids HTML/string parsing issues with apostrophes
+    opt.value=text;
+    return opt;
+  }
+  function makeSel(opts,value){
+    const sel=document.createElement('select');
+    sel.appendChild(makeOption('— Select —'));
+    opts.forEach(o=> sel.appendChild(makeOption(o)));
+    sel.value=value||'';
+    return sel;
+  }
+  function makeRegionSel(value){
+    const sel=document.createElement('select');
+    regions.forEach(r=> sel.appendChild(makeOption(r)));
+    sel.value=value||''; return sel;
+  }
+
   function optionsFor(vendors,region){
     const priority = {
       'Berry': {
@@ -252,7 +283,7 @@ Berry Flow,Berry,Y"></textarea>
         'Ty Watson Plumbing':7,
         'Morris Plumbing':8,
         'Culburra Plumbing Services - Chris Quinan':9,
-        'O'Brien Plumbing Batemans Bay':10,
+        "O'Brien Plumbing Batemans Bay":10,
         'Brian Gould - BW + SJ Gould Plumbing':11,
         'Shoal Plumbing':12,
         // Electricians (lower priority numbers win; keep plumbers ahead in Berry)
@@ -278,7 +309,7 @@ Berry Flow,Berry,Y"></textarea>
         'Shoal Plumbing':8,
         'Morris Plumbing':9,
         'Culburra Plumbing Services - Chris Quinan':10,
-        'O'Brien Plumbing Batemans Bay':11,
+        "O'Brien Plumbing Batemans Bay":11,
         'Brian Gould - BW + SJ Gould Plumbing':12,
         // Electricians (after plumbers in South)
         'Allman Electrical Services':20,
@@ -304,13 +335,7 @@ Berry Flow,Berry,Y"></textarea>
       .map(v=>v.name);
     return list;
   }
-  function makeSel(opts,value){
-    const sel=document.createElement('select'); sel.innerHTML='<option value="">— Select —</option>' + opts.map(o=>`<option>${o}</option>`).join('');
-    sel.value=value||''; return sel;
-  }
-  function makeRegionSel(value){
-    const sel=document.createElement('select'); sel.innerHTML=regions.map(r=>`<option>${r}</option>`).join(''); sel.value=value||''; return sel;
-  }
+
   function render(){
     const tb=$('#assignTbl tbody'); if(!tb) return; tb.innerHTML='';
     rows.forEach((r,i)=>{
@@ -432,22 +457,20 @@ Berry Flow,Berry,Y"></textarea>
       {name:'Williamson Electrical NSW', regions:['South'], travel:true}
     ];
 
-    // Plumbers roster (regions + travel) — from your paste
+    // Plumbers roster (regions + travel)
     plumbs = [
       {name:'Absolute Plumbing Services', regions:['Berry','South'], travel:true},
       {name:'Jervis Bay Plumbing', regions:['South'], travel:false},
       {name:'Nowra Emergency Plumbing', regions:['South'], travel:true},
       {name:'Shoalhaven Plumbing', regions:['South'], travel:true},
-      {name:'O'Brien Plumbing Batemans Bay', regions:['South'], travel:false},
+      {name:"O'Brien Plumbing Batemans Bay", regions:['South'], travel:false},
       {name:'Brian Gould - BW + SJ Gould Plumbing', regions:['South'], travel:true},
       {name:'Steve Watson Plumbing', regions:['South'], travel:true},
       {name:'Ty Watson Plumbing', regions:['South'], travel:true},
       {name:'Morris Plumbing', regions:['South'], travel:true},
       {name:'Michael Sinclair - Plumber Drainer Gasfitter', regions:['South'], travel:true},
       {name:'Culburra Plumbing Services - Chris Quinan', regions:['South'], travel:true},
-      {name:'Shoal Plumbing', regions:['South'], travel:true},
-      // observed variant in data
-      {name:'Absolute Plumbing Services', regions:['Berry','South'], travel:true}
+      {name:'Shoal Plumbing', regions:['South'], travel:true}
     ];
 
     const N = [
@@ -481,6 +504,7 @@ Berry Flow,Berry,Y"></textarea>
   $('#importPropText').addEventListener('click',()=>importPropsFromText($('#propCsvText').value,'pasted CSV'));
   $('#importElecText').addEventListener('click',()=>importVendorsFromText('elec',$('#elecCsvText').value,'pasted CSV'));
   $('#importPlumbText').addEventListener('click',()=>importVendorsFromText('plumb',$('#plumbCsvText').value,'pasted CSV'));
+  $('#printPdf').addEventListener('click',()=>window.print());
 
   // text parsers (paste mode)
   function parseTextVendors(text){
@@ -498,7 +522,7 @@ Berry Flow,Berry,Y"></textarea>
     }).filter(r=>r.property);
   }
 
-  // ---- Self-tests (minimal) ----
+  // ---- Self-tests (expanded) ----
   function runSelfTests(){
     try{
       // CSV parsing tests
@@ -510,15 +534,24 @@ Berry Flow,Berry,Y"></textarea>
       let r3 = parseCSV(csv3); console.assert(r3.length===2 && r3[1][2]==='3','CSV tab basic failed');
       let csv4 = 'A,B\n"x,y",z';
       let r4 = parseCSV(csv4); console.assert(r4.length===2 && r4[1][0]==='x,y','CSV quoted field failed');
+      // Apostrophe in CSV (unquoted) should not break
+      let csv5 = 'Name,Region\nO\'Brien Plumbing Batemans Bay,South';
+      let r5 = parseCSV(csv5); console.assert(r5.length===2 && r5[1][0]==="O'Brien Plumbing Batemans Bay" && r5[1][1]==='South','Apostrophe unquoted CSV failed');
+      // Apostrophe in CSV (quoted)
+      let csv6 = 'Name,Region\n"O\'Brien Plumbing Batemans Bay",South';
+      let r6 = parseCSV(csv6); console.assert(r6.length===2 && r6[1][0]==="O'Brien Plumbing Batemans Bay" && r6[1][1]==='South','Apostrophe quoted CSV failed');
+
       // Text vendor parser
       let tv = 'Vendor One | Berry, South | Y\nVendor Two | North | N';
       let tvR = parseTextVendors(tv); console.assert(tvR.length===2 && tvR[0].regions.includes('Berry') && tvR[1].travel===false,'Vendor text parse failed');
+
       // Plumber priority test
       let pv = optionsFor([
         {name:'Absolute Plumbing Services', regions:['South'], travel:true},
         {name:'Jervis Bay Plumbing', regions:['South'], travel:false}
       ], 'South');
       console.assert(pv[0]==='Absolute Plumbing Services' && pv[1]==='Jervis Bay Plumbing','Plumber priority (South) failed');
+
       // Canonicalization tests
       let merged = dedupeBy(['Absolute Plumbing Service','Absolute Plumbing Services'].map(n=>({name:canonicalName(n)})),'name');
       console.assert(merged.length===1 && merged[0].name==='Absolute Plumbing Services','Canonicalization failed');
@@ -526,6 +559,11 @@ Berry Flow,Berry,Y"></textarea>
       console.assert(ob.length===1 && ob[0].name==="O'Brien Plumbing Batemans Bay","O'Brien canonicalization failed");
       console.assert(canonicalName('TY WATSON PLUMBING')==='Ty Watson Plumbing','Ty Watson casing failed');
       console.assert(canonicalProperty("Curley’s Sunsets")==="Curley's Sunsets",'Property apostrophe normalization failed');
+
+      // DOM option creation should survive apostrophes
+      const selTest = makeSel(["O'Brien Plumbing Batemans Bay"], '');
+      console.assert(selTest && selTest.options.length===2 && selTest.options[1].textContent==="O'Brien Plumbing Batemans Bay", 'Option build with apostrophe failed');
+
       setMsg('Self-tests passed. Ready.','ok');
     }catch(e){
       console.error('Self-test error',e); setMsg('Self-tests failed: '+e.message,'warn');
